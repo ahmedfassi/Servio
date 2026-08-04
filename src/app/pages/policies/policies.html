@@ -1,0 +1,89 @@
+<div
+  class="reading-progress"
+  role="progressbar"
+  aria-label="Reading progress"
+  aria-valuemin="0"
+  aria-valuemax="100"
+  [attr.aria-valuenow]="readingProgress().toFixed(0)"
+>
+  <span [style.width.%]="readingProgress()"></span>
+</div>
+
+<section class="policies-hero" aria-labelledby="policies-title">
+  <div>
+    <p class="eyebrow">Clear by principle</p>
+    <h1 id="policies-title">Policies without<br /><span>the small print feeling.</span></h1>
+  </div>
+  <div class="policy-meta">
+    <span>Version 1.0</span>
+    <span>Effective August 4, 2026</span>
+    <p>Plain-language guidance for using Serv.io with confidence.</p>
+  </div>
+</section>
+
+<div class="policy-layout">
+  <aside class="side-navigation">
+    <p>On this page</p>
+    <nav aria-label="Policy sections">
+      @for (section of sections; track section.id) {
+        <a [href]="'#' + section.id" (click)="openSection(section.id)">
+          <span>{{ section.number }}</span
+          >{{ section.title }}
+        </a>
+      }
+    </nav>
+    <div class="help-card">
+      <span aria-hidden="true">?</span>
+      <strong>Need clarity?</strong>
+      <p>Ask us about any part of these policies.</p>
+      <a href="mailto:privacy@serv.io">privacy&#64;serv.io</a>
+    </div>
+  </aside>
+
+  <main class="policy-content">
+    <div class="plain-language-note">
+      <span aria-hidden="true">✓</span>
+      <div>
+        <strong>Our plain-language promise</strong>
+        <p>We write for people first. Expand any section to read the details.</p>
+      </div>
+    </div>
+
+    @for (section of sections; track section.id) {
+      <section class="policy-section" [id]="section.id">
+        <button
+          type="button"
+          class="policy-toggle"
+          [attr.aria-expanded]="isOpen(section.id)"
+          [attr.aria-controls]="section.id + '-content'"
+          (click)="toggleSection(section.id)"
+        >
+          <span class="section-number">{{ section.number }}</span>
+          <span class="title-group"
+            ><strong>{{ section.title }}</strong
+            ><small>{{ section.summary }}</small></span
+          >
+          <span class="toggle-mark" [class.open]="isOpen(section.id)" aria-hidden="true"></span>
+        </button>
+
+        @if (isOpen(section.id)) {
+          <div class="policy-body" [id]="section.id + '-content'">
+            @for (paragraph of section.paragraphs; track paragraph) {
+              <p>{{ paragraph }}</p>
+            }
+            <ul>
+              @for (bullet of section.bullets; track bullet) {
+                <li>{{ bullet }}</li>
+              }
+            </ul>
+          </div>
+        }
+      </section>
+    }
+
+    <div class="policy-end">
+      <span>End of policies</span>
+      <p>We review this page as Serv.io evolves. Material changes will be communicated clearly.</p>
+    </div>
+  </main>
+</div>

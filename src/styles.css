@@ -1,1 +1,78 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --orange: #ffa04a;
+  --black: #0d0d0d;
+  --navy: #1e2a3a;
+  --cyan: #4ecdc4;
+  --apricot: #ffc97a;
+  --off-white: #f5f0eb;
+  --white: #ffffff;
+  --slate: #667085;
+  --border: rgba(13, 13, 13, 0.1);
+  --display-font: 'Neiko', 'Arial Black', 'Trebuchet MS', sans-serif;
+  --body-font: 'Urbanist', 'Avenir Next', 'Segoe UI', sans-serif;
+  --logo-font: 'Poiret One', 'Century Gothic', sans-serif;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: var(--black);
+  background: var(--off-white);
+  font-family: var(--body-font);
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+a {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  color: var(--black);
+  background: var(--apricot);
+}
+
+:focus-visible {
+  outline: 3px solid var(--cyan);
+  outline-offset: 4px;
+}
+
+.eyebrow {
+  margin: 0 0 16px;
+  color: #9b5517;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

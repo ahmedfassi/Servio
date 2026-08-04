@@ -1,15 +1,12 @@
 import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { Footer } from './components/footer/footer';
+import { Navbar } from './components/navbar/navbar';
 
 @Component({
   selector: 'app-root',
-  imports: [],
+  imports: [Navbar, RouterOutlet, Footer],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
-export class App {
-  scrollToFeatures(): void {
-    document
-      .getElementById('features')
-      ?.scrollIntoView({ behavior: 'smooth' });
-  }
-}
+export class App {}

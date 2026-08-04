@@ -1,0 +1,48 @@
+<section class="services-hero" aria-labelledby="services-title">
+  <div class="heading-block">
+    <p class="eyebrow">One connected service flow</p>
+    <h1 id="services-title">Everything in orbit.<br /><span>Nothing out of reach.</span></h1>
+    <p class="intro">
+      Eight focused tools work as one calm operating system, so your team can spend less time
+      managing software and more time creating memorable service.
+    </p>
+  </div>
+
+  <div class="orbit" aria-label="Serv.io platform services">
+    <div class="orbit-ring ring-outer" aria-hidden="true"></div>
+    <div class="orbit-ring ring-inner" aria-hidden="true"></div>
+    <div class="orbit-center">
+      <span class="pulse"></span>
+      <p>Connected by</p>
+      <h2>Serv<span>.io</span></h2>
+      <small>One live platform</small>
+    </div>
+
+    @for (service of services; track service.name) {
+      <button
+        type="button"
+        [class]="'service-card ' + service.position"
+        [class.is-active]="activeService() === service.name"
+        [attr.aria-expanded]="activeService() === service.name"
+        (click)="toggleService(service.name)"
+      >
+        <span class="service-icon" aria-hidden="true">{{ service.icon }}</span>
+        <span class="service-copy">
+          <small>{{ service.kicker }}</small>
+          <strong>{{ service.name }}</strong>
+          <span class="service-detail">{{ service.description }}</span>
+        </span>
+      </button>
+    }
+  </div>
+
+  <div class="service-note">
+    <div>
+      <p class="eyebrow">Built to move together</p>
+      <h2>From first scan to final receipt, every moment stays connected.</h2>
+    </div>
+    <a routerLink="/about" fragment="demo"
+      >See Serv.io in action <span aria-hidden="true">↗</span></a
+    >
+  </div>
+</section>
