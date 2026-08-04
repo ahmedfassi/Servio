@@ -1,5 +1,4 @@
 import { Component, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
 
 interface Service {
   readonly name: string;
@@ -11,7 +10,6 @@ interface Service {
 
 @Component({
   selector: 'app-services',
-  imports: [RouterLink],
   templateUrl: './services.html',
   styleUrl: './services.css',
 })

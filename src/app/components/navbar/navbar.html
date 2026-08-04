@@ -1,6 +1,6 @@
-<header class="site-header">
+<header class="site-header" [class.scrolled]="scrolled()">
   <div class="navbar">
-    <a class="logo" routerLink="/" aria-label="Serv.io home" (click)="closeMenu()">
+    <a class="logo" href="#home" aria-label="Serv.io home" (click)="activateSection('home')">
       Serv<span>.io</span>
     </a>
 
@@ -18,15 +18,33 @@
     <div class="nav-panel" id="main-navigation" [class.is-open]="menuOpen()">
       <nav class="nav-links" aria-label="Main navigation">
         <a
-          routerLink="/"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-          (click)="closeMenu()"
+          href="#home"
+          [class.active]="activeSection() === 'home'"
+          [attr.aria-current]="activeSection() === 'home' ? 'location' : null"
+          (click)="activateSection('home')"
           >Home</a
         >
-        <a routerLink="/services" routerLinkActive="active" (click)="closeMenu()">Services</a>
-        <a routerLink="/about" routerLinkActive="active" (click)="closeMenu()">About Us</a>
-        <a routerLink="/policies" routerLinkActive="active" (click)="closeMenu()">Policies</a>
+        <a
+          href="#services"
+          [class.active]="activeSection() === 'services'"
+          [attr.aria-current]="activeSection() === 'services' ? 'location' : null"
+          (click)="activateSection('services')"
+          >Services</a
+        >
+        <a
+          href="#about"
+          [class.active]="activeSection() === 'about'"
+          [attr.aria-current]="activeSection() === 'about' ? 'location' : null"
+          (click)="activateSection('about')"
+          >About Us</a
+        >
+        <a
+          href="#policies"
+          [class.active]="activeSection() === 'policies'"
+          [attr.aria-current]="activeSection() === 'policies' ? 'location' : null"
+          (click)="activateSection('policies')"
+          >Policies</a
+        >
       </nav>
     </div>
   </div>

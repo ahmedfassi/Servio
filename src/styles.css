@@ -62,6 +62,1045 @@ a {
   text-transform: uppercase;
 }
 
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+#home,
+#services,
+#about,
+#policies,
+#demo {
+  scroll-margin-top: 92px;
+}
+
+/* Home enhancements */
+
+app-home .hero-glow {
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
+  filter: blur(70px);
+  pointer-events: none;
+  animation: ambient-glow 9s ease-in-out infinite alternate;
+}
+
+app-home .glow-orange {
+  top: 4%;
+  left: -18%;
+  width: 430px;
+  height: 430px;
+  background: rgba(255, 160, 74, 0.16);
+}
+
+app-home .glow-cyan {
+  right: -15%;
+  bottom: 2%;
+  width: 390px;
+  height: 390px;
+  background: rgba(78, 205, 196, 0.13);
+  animation-delay: 1.2s;
+  animation-direction: alternate-reverse;
+}
+
+app-home .hero-label,
+app-home .hero h1,
+app-home .rotating-message,
+app-home .hero-description,
+app-home .hero-actions,
+app-home .hero-benefits {
+  animation: hero-stagger 0.65s ease both;
+}
+
+app-home .hero h1 {
+  animation-delay: 0.09s;
+}
+
+app-home .rotating-message {
+  animation-delay: 0.16s;
+}
+
+app-home .hero-description {
+  animation-delay: 0.23s;
+}
+
+app-home .hero-actions {
+  animation-delay: 0.3s;
+}
+
+app-home .hero-benefits {
+  animation-delay: 0.37s;
+}
+
+app-home .rotating-message {
+  height: 31px;
+  margin-top: 23px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--navy);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+app-home .rotating-prefix {
+  color: var(--slate);
+}
+
+app-home .rotating-viewport {
+  position: relative;
+  width: 165px;
+  height: 31px;
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+app-home .rotating-viewport strong {
+  position: absolute;
+  padding: 5px 10px;
+  border-radius: 8px;
+  color: #82420b;
+  background: rgba(255, 160, 74, 0.15);
+  animation: phrase-in 0.45s ease both;
+}
+
+app-home .quick-stats article {
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease;
+}
+
+app-home .quick-stats article:hover {
+  background: radial-gradient(circle at 50% 120%, rgba(255, 160, 74, 0.18), transparent 60%);
+  transform: translateY(-5px);
+}
+
+app-home .quick-stats.stats-visible article {
+  animation: stat-arrive 0.55s ease both;
+}
+
+app-home .quick-stats.stats-visible article:nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+app-home .quick-stats.stats-visible article:nth-child(3) {
+  animation-delay: 0.16s;
+}
+
+app-home .quick-stats.stats-visible article:nth-child(4) {
+  animation-delay: 0.24s;
+}
+
+app-home .floor-demo,
+app-home .product-flow {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto 110px;
+}
+
+app-home .floor-heading {
+  margin-bottom: 48px;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 55px;
+}
+
+app-home .floor-heading h2,
+app-home .flow-heading h2 {
+  margin: 0;
+  font-family: var(--display-font);
+  font-size: clamp(43px, 5.5vw, 70px);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+
+app-home .floor-heading h2 span,
+app-home .flow-heading h2 span {
+  color: var(--orange);
+}
+
+app-home .floor-legend {
+  max-width: 390px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 11px 17px;
+  color: var(--slate);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+app-home .floor-legend span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+app-home .floor-legend i,
+app-home .status-chip::before {
+  width: 7px;
+  height: 7px;
+  display: inline-block;
+  border-radius: 50%;
+  background: currentColor;
+  content: '';
+}
+
+app-home .available {
+  color: #218b78;
+}
+
+app-home .occupied {
+  color: #d26c1c;
+}
+
+app-home .preparing {
+  color: #638fd8;
+}
+
+app-home .reserved {
+  color: #8571c9;
+}
+
+app-home .payment-requested {
+  color: #c55068;
+}
+
+app-home .floor-workspace {
+  padding: 18px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(290px, 0.65fr);
+  gap: 18px;
+  border: 1px solid rgba(30, 42, 58, 0.12);
+  border-radius: 34px;
+  background: rgba(255, 255, 255, 0.62);
+  box-shadow: 0 30px 75px rgba(30, 42, 58, 0.12);
+}
+
+app-home .floor-map {
+  position: relative;
+  min-height: 620px;
+  overflow: hidden;
+  border-radius: 25px;
+  background-color: #e9e3dc;
+  background-image:
+    linear-gradient(rgba(30, 42, 58, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 42, 58, 0.045) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+app-home .floor-map::after {
+  position: absolute;
+  content: '';
+  right: 22%;
+  bottom: 0;
+  left: 22%;
+  height: 9px;
+  border-radius: 9px 9px 0 0;
+  background: var(--cyan);
+  opacity: 0.55;
+}
+
+app-home .floor-label {
+  position: absolute;
+  z-index: 2;
+  top: 25px;
+  left: 27px;
+  color: var(--navy);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+app-home .floor-label span {
+  margin-left: 9px;
+  color: var(--slate);
+  font-size: 9px;
+}
+
+app-home .kitchen-zone {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 27%;
+  height: 100%;
+  padding-top: 30px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 12px;
+  border-left: 1px dashed rgba(30, 42, 58, 0.22);
+  color: var(--apricot);
+  background: var(--navy);
+}
+
+app-home .kitchen-zone span {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+app-home .kitchen-zone i {
+  width: 62%;
+  height: 54px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+app-home .service-path {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 10%;
+  width: 58%;
+  border-top: 1px dashed rgba(255, 160, 74, 0.5);
+  transform: rotate(-9deg);
+}
+
+app-home .floor-table {
+  position: absolute;
+  z-index: 3;
+  width: 92px;
+  min-height: 76px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border: 1px solid currentColor;
+  border-radius: 24px 24px 14px 14px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 9px 18px rgba(30, 42, 58, 0.1);
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    background 0.22s ease;
+}
+
+app-home .floor-table::before,
+app-home .floor-table::after {
+  position: absolute;
+  content: '';
+  top: 50%;
+  width: 8px;
+  height: 28px;
+  border-radius: 6px;
+  background: currentColor;
+  opacity: 0.2;
+  transform: translateY(-50%);
+}
+
+app-home .floor-table::before {
+  left: -12px;
+}
+
+app-home .floor-table::after {
+  right: -12px;
+}
+
+app-home .floor-table:hover,
+app-home .floor-table:focus-visible,
+app-home .floor-table.selected {
+  z-index: 5;
+  background: #fff;
+  box-shadow: 0 14px 30px color-mix(in srgb, currentColor 25%, transparent);
+  transform: translateY(-5px) scale(1.04);
+}
+
+app-home .floor-table.selected {
+  outline: 3px solid currentColor;
+  outline-offset: 4px;
+}
+
+app-home .floor-table span {
+  color: var(--navy);
+  font-weight: 900;
+}
+
+app-home .floor-table small {
+  margin-top: 5px;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+app-home .table-a {
+  top: 18%;
+  left: 11%;
+}
+app-home .table-b {
+  top: 16%;
+  left: 35%;
+}
+app-home .table-c {
+  top: 39%;
+  left: 18%;
+}
+app-home .table-d {
+  top: 37%;
+  left: 49%;
+}
+app-home .table-e {
+  top: 66%;
+  left: 9%;
+}
+app-home .table-f {
+  top: 65%;
+  left: 32%;
+}
+app-home .table-g {
+  top: 77%;
+  left: 55%;
+}
+app-home .table-h {
+  top: 11%;
+  left: 57%;
+}
+
+app-home .table-panel {
+  padding: 28px;
+  border-radius: 25px;
+  color: var(--white);
+  background: var(--navy);
+}
+
+app-home .panel-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: #aeb8c5;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+app-home .panel-topline button {
+  padding: 7px 9px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 100px;
+  color: #d4dce6;
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 8px;
+  letter-spacing: 0;
+}
+
+app-home .panel-topline i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 0 4px rgba(78, 205, 196, 0.1);
+}
+
+app-home .panel-topline i.paused {
+  background: var(--apricot);
+}
+
+app-home .table-identity {
+  margin: 45px 0 38px;
+  display: flex;
+  align-items: center;
+  gap: 19px;
+}
+
+app-home .table-identity > strong {
+  font-family: var(--display-font);
+  font-size: 76px;
+  line-height: 0.9;
+}
+
+app-home .status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+app-home .table-identity p {
+  margin: 8px 0 0;
+  color: #c3ccd7;
+  font-size: 12px;
+}
+
+app-home .table-panel dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+app-home .table-panel dl div {
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+app-home .table-panel dt {
+  color: #9ca9b8;
+  font-size: 9px;
+  text-transform: uppercase;
+}
+
+app-home .table-panel dd {
+  margin: 7px 0 0;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+app-home .panel-signal {
+  margin-top: 28px;
+  padding-top: 22px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+app-home .panel-signal span {
+  width: 31px;
+  height: 31px;
+  flex: none;
+  border: 1px solid var(--cyan);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 8px rgba(78, 205, 196, 0.12);
+}
+
+app-home .panel-signal p {
+  margin: 0;
+  color: #aeb8c5;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+app-home .product-flow {
+  padding: 80px 50px 65px;
+  overflow: hidden;
+  border-radius: 34px;
+  color: var(--white);
+  background: var(--black);
+}
+
+app-home .flow-heading {
+  text-align: center;
+}
+
+app-home .flow-heading .eyebrow {
+  color: var(--apricot);
+}
+
+app-home .flow-path {
+  position: relative;
+  margin-top: 70px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 18px;
+}
+
+app-home .flow-line {
+  position: absolute;
+  top: 57px;
+  right: 8%;
+  left: 8%;
+  height: 1px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+app-home .flow-line span {
+  width: 120px;
+  height: 100%;
+  display: block;
+  background: linear-gradient(90deg, transparent, var(--orange), var(--cyan), transparent);
+  animation: flow-travel 5s linear infinite;
+}
+
+app-home .flow-path article {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+app-home .flow-number {
+  display: block;
+  color: #6e7174;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+}
+
+app-home .flow-icon {
+  width: 78px;
+  height: 78px;
+  margin: 12px auto 20px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 23px;
+  color: var(--orange);
+  background: #171717;
+  box-shadow: 0 0 0 8px #0d0d0d;
+  font-size: 30px;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+app-home .flow-path article:hover .flow-icon {
+  border-color: var(--orange);
+  box-shadow:
+    0 0 0 8px #0d0d0d,
+    0 0 30px rgba(255, 160, 74, 0.18);
+  transform: translateY(-5px);
+}
+
+app-home .flow-path h3 {
+  margin: 0;
+  font-size: 14px;
+}
+
+app-home .flow-path p {
+  margin: 8px auto 0;
+  color: #8f9194;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+app-home .qr-icon {
+  grid-template-columns: repeat(2, 12px);
+  grid-template-rows: repeat(2, 12px);
+  gap: 6px;
+}
+
+app-home .qr-icon i {
+  height: 12px;
+  border: 2px solid var(--cyan);
+}
+
+app-home .qr-icon i:last-child {
+  grid-column: 2;
+}
+
+app-home .menu-icon {
+  padding: 22px;
+  align-content: center;
+  gap: 5px;
+}
+
+app-home .menu-icon i {
+  width: 28px;
+  height: 2px;
+  display: block;
+  background: var(--orange);
+}
+
+app-home .kitchen-icon {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  gap: 4px;
+}
+
+app-home .kitchen-icon i {
+  width: 8px;
+  height: 28px;
+  border-radius: 8px 8px 2px 2px;
+  background: var(--cyan);
+}
+
+app-home .kitchen-icon i:last-child {
+  height: 19px;
+}
+
+@keyframes ambient-glow {
+  to {
+    transform: translate(28px, -16px) scale(1.08);
+  }
+}
+
+@keyframes hero-stagger {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@keyframes phrase-in {
+  from {
+    opacity: 0;
+    transform: translateY(75%);
+  }
+}
+
+@keyframes stat-arrive {
+  from {
+    opacity: 0.35;
+    transform: translateY(9px);
+  }
+}
+
+@keyframes flow-travel {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(900%);
+  }
+}
+
+@media (max-width: 900px) {
+  app-home .floor-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  app-home .floor-legend {
+    justify-content: flex-start;
+  }
+  app-home .floor-workspace {
+    grid-template-columns: 1fr;
+  }
+  app-home .floor-map {
+    min-height: 570px;
+  }
+  app-home .table-panel dl {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  app-home .flow-path {
+    grid-template-columns: repeat(5, 190px);
+    overflow-x: auto;
+    padding: 0 10px 20px;
+    scroll-snap-type: x mandatory;
+  }
+  app-home .flow-path article {
+    scroll-snap-align: center;
+  }
+  app-home .flow-line {
+    right: auto;
+    left: 80px;
+    width: 800px;
+  }
+}
+
+@media (max-width: 650px) {
+  app-home .rotating-message {
+    justify-content: center;
+  }
+  app-home .rotating-viewport {
+    width: 158px;
+  }
+  app-home .floor-demo,
+  app-home .product-flow {
+    width: min(100% - 30px, 1180px);
+    margin-bottom: 75px;
+  }
+  app-home .floor-heading h2,
+  app-home .flow-heading h2 {
+    font-size: 43px;
+  }
+  app-home .floor-workspace {
+    padding: 10px;
+    border-radius: 25px;
+  }
+  app-home .floor-map {
+    min-height: auto;
+    padding: 80px 18px 22px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 13px;
+  }
+  app-home .floor-map::after,
+  app-home .kitchen-zone,
+  app-home .service-path {
+    display: none;
+  }
+  app-home .floor-table {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    min-height: 88px;
+  }
+  app-home .table-panel {
+    padding: 24px 20px;
+  }
+  app-home .table-identity {
+    margin: 35px 0 28px;
+  }
+  app-home .table-panel dl {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  app-home .product-flow {
+    padding: 58px 15px 40px;
+  }
+}
+
+/* About values constellation */
+
+app-about .values-constellation {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto 120px;
+  padding: 80px 60px 65px;
+  display: grid;
+  grid-template-columns: 0.65fr 1.35fr;
+  align-items: center;
+  gap: 50px;
+  overflow: hidden;
+  border: 1px solid rgba(30, 42, 58, 0.1);
+  border-radius: 36px;
+  background: rgba(255, 255, 255, 0.48);
+  box-shadow: 0 30px 80px rgba(30, 42, 58, 0.1);
+}
+
+app-about .constellation-heading h2 {
+  margin: 0;
+  font-family: var(--display-font);
+  font-size: clamp(40px, 5vw, 65px);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+
+app-about .constellation-heading h2 span {
+  color: var(--orange);
+}
+
+app-about .constellation-heading > p:last-child {
+  max-width: 380px;
+  margin: 25px 0 0;
+  color: var(--slate);
+  line-height: 1.7;
+}
+
+app-about .constellation {
+  position: relative;
+  min-height: 570px;
+}
+
+app-about .constellation::before {
+  position: absolute;
+  content: '';
+  inset: 11%;
+  border: 1px dashed rgba(30, 42, 58, 0.16);
+  border-radius: 50%;
+  animation: constellation-spin 35s linear infinite;
+}
+
+app-about .constellation-lines {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 62%;
+  height: 62%;
+  background: conic-gradient(
+    from 8deg,
+    transparent 0 8%,
+    rgba(78, 205, 196, 0.35) 8.2% 8.5%,
+    transparent 8.7% 27%,
+    rgba(255, 160, 74, 0.35) 27.2% 27.5%,
+    transparent 27.7% 48%,
+    rgba(78, 205, 196, 0.3) 48.2% 48.5%,
+    transparent 48.7% 69%,
+    rgba(255, 160, 74, 0.3) 69.2% 69.5%,
+    transparent 69.7% 88%,
+    rgba(78, 205, 196, 0.3) 88.2% 88.5%,
+    transparent 88.7%
+  );
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+app-about .constellation-core {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  left: 50%;
+  width: 145px;
+  height: 145px;
+  display: grid;
+  place-content: center;
+  border-radius: 50%;
+  color: var(--white);
+  background: var(--navy);
+  box-shadow:
+    0 0 0 14px rgba(30, 42, 58, 0.05),
+    0 22px 50px rgba(30, 42, 58, 0.25);
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+app-about .constellation-core span,
+app-about .constellation-core strong {
+  font-family: var(--logo-font);
+  font-size: 34px;
+  line-height: 0.78;
+}
+
+app-about .constellation-core strong {
+  color: var(--orange);
+}
+
+app-about .value-node {
+  position: absolute;
+  z-index: 4;
+  width: 185px;
+  min-height: 112px;
+  padding: 15px 17px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  border: 1px solid rgba(30, 42, 58, 0.1);
+  border-radius: 19px;
+  color: var(--black);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 28px rgba(30, 42, 58, 0.09);
+  text-align: left;
+  transform: translate(-50%, -50%);
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+app-about .value-node > span {
+  color: var(--orange);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+app-about .value-node strong {
+  margin-top: 6px;
+  font-size: 15px;
+}
+
+app-about .value-node small {
+  max-height: 0;
+  margin-top: 0;
+  overflow: hidden;
+  color: var(--slate);
+  line-height: 1.45;
+  opacity: 0;
+  transition:
+    max-height 0.25s ease,
+    opacity 0.25s ease,
+    margin 0.25s ease;
+}
+
+app-about .value-node:hover,
+app-about .value-node:focus-visible,
+app-about .value-node.active {
+  border-color: var(--cyan);
+  box-shadow: 0 18px 38px rgba(78, 205, 196, 0.15);
+  transform: translate(-50%, -55%);
+}
+
+app-about .value-node.active small,
+app-about .value-node:hover small,
+app-about .value-node:focus-visible small {
+  max-height: 48px;
+  margin-top: 7px;
+  opacity: 1;
+}
+
+app-about .value-north {
+  top: 8%;
+  left: 50%;
+}
+app-about .value-east {
+  top: 36%;
+  left: 84%;
+}
+app-about .value-south-east {
+  top: 82%;
+  left: 72%;
+}
+app-about .value-south-west {
+  top: 82%;
+  left: 28%;
+}
+app-about .value-west {
+  top: 36%;
+  left: 16%;
+}
+
+@keyframes constellation-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 950px) {
+  app-about .values-constellation {
+    padding: 60px 35px;
+    grid-template-columns: 1fr;
+  }
+  app-about .constellation-heading {
+    max-width: 650px;
+  }
+}
+
+@media (max-width: 650px) {
+  app-about .values-constellation {
+    width: min(100% - 30px, 1180px);
+    margin-bottom: 75px;
+    padding: 45px 20px 20px;
+  }
+  app-about .constellation {
+    min-height: auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  app-about .constellation::before,
+  app-about .constellation-lines {
+    display: none;
+  }
+  app-about .constellation-core {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: 130px;
+    margin: 20px 0 10px;
+    border-radius: 22px;
+    transform: none;
+  }
+  app-about .value-node,
+  app-about .value-node:hover,
+  app-about .value-node:focus-visible,
+  app-about .value-node.active {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    min-height: 105px;
+    transform: none;
+  }
+  app-about .value-node small {
+    max-height: 48px;
+    margin-top: 7px;
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

@@ -106,6 +106,34 @@
   </div>
 </section>
 
+<section class="values-constellation" aria-labelledby="values-title">
+  <div class="constellation-heading">
+    <p class="eyebrow">Values in alignment</p>
+    <h2 id="values-title">Five points.<br /><span>One shared direction.</span></h2>
+    <p>Choose a value to explore the principles behind every Serv.io decision.</p>
+  </div>
+
+  <div class="constellation" aria-label="Serv.io values constellation">
+    <div class="constellation-lines" aria-hidden="true"></div>
+    <div class="constellation-core" aria-hidden="true"><span>Serv</span><strong>.io</strong></div>
+    @for (value of valueNodes; track value.name) {
+      <button
+        type="button"
+        [class]="'value-node ' + value.position"
+        [class.active]="activeValue() === value.name"
+        [attr.aria-pressed]="activeValue() === value.name"
+        (click)="selectValue(value.name)"
+        (focus)="selectValue(value.name)"
+        (mouseenter)="selectValue(value.name)"
+      >
+        <span>{{ value.symbol }}</span
+        ><strong>{{ value.name }}</strong
+        ><small>{{ value.description }}</small>
+      </button>
+    }
+  </div>
+</section>
+
 <section class="demo-section" id="demo" aria-labelledby="demo-title">
   <span id="contact"></span>
   <div>
@@ -114,6 +142,6 @@
   </div>
   <div class="demo-action">
     <p>See how Serv.io can fit the pace, personality and ambition of your venue.</p>
-    <a routerLink="/services">Explore the platform <span aria-hidden="true">→</span></a>
+    <a href="#services">Explore the platform <span aria-hidden="true">→</span></a>
   </div>
 </section>

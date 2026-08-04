@@ -16,7 +16,7 @@
   </div>
   <div class="policy-meta">
     <span>Version 1.0</span>
-    <span>Effective August 4, 2026</span>
+    <span>Last updated August 4, 2026</span>
     <p>Plain-language guidance for using Serv.io with confidence.</p>
   </div>
 </section>
@@ -26,7 +26,12 @@
     <p>On this page</p>
     <nav aria-label="Policy sections">
       @for (section of sections; track section.id) {
-        <a [href]="'#' + section.id" (click)="openSection(section.id)">
+        <a
+          [href]="'#' + section.id"
+          [class.active]="activeSection() === section.id"
+          [attr.aria-current]="activeSection() === section.id ? 'location' : null"
+          (click)="openSection(section.id)"
+        >
           <span>{{ section.number }}</span
           >{{ section.title }}
         </a>
@@ -40,7 +45,12 @@
     </div>
   </aside>
 
-  <main class="policy-content">
+  <div class="policy-content">
+    <p class="sr-only" aria-live="polite">
+      @if (copiedSection()) {
+        Link copied to clipboard.
+      }
+    </p>
     <div class="plain-language-note">
       <span aria-hidden="true">✓</span>
       <div>
@@ -51,20 +61,32 @@
 
     @for (section of sections; track section.id) {
       <section class="policy-section" [id]="section.id">
-        <button
-          type="button"
-          class="policy-toggle"
-          [attr.aria-expanded]="isOpen(section.id)"
-          [attr.aria-controls]="section.id + '-content'"
-          (click)="toggleSection(section.id)"
-        >
-          <span class="section-number">{{ section.number }}</span>
-          <span class="title-group"
-            ><strong>{{ section.title }}</strong
-            ><small>{{ section.summary }}</small></span
+        <div class="policy-header">
+          <button
+            type="button"
+            class="policy-toggle"
+            [attr.aria-expanded]="isOpen(section.id)"
+            [attr.aria-controls]="section.id + '-content'"
+            (click)="toggleSection(section.id)"
           >
-          <span class="toggle-mark" [class.open]="isOpen(section.id)" aria-hidden="true"></span>
-        </button>
+            <span class="section-number">{{ section.number }}</span>
+            <span class="title-group"
+              ><strong>{{ section.title }}</strong
+              ><small>{{ section.summary }}</small></span
+            >
+            <span class="toggle-mark" [class.open]="isOpen(section.id)" aria-hidden="true"></span>
+          </button>
+          <button
+            type="button"
+            class="copy-link"
+            [class.copied]="copiedSection() === section.id"
+            [attr.aria-label]="'Copy link to ' + section.title"
+            (click)="copySectionLink(section.id)"
+          >
+            <span aria-hidden="true">{{ copiedSection() === section.id ? '✓' : '↗' }}</span>
+            {{ copiedSection() === section.id ? 'Copied' : 'Copy link' }}
+          </button>
+        </div>
 
         @if (isOpen(section.id)) {
           <div class="policy-body" [id]="section.id + '-content'">
@@ -85,5 +107,5 @@
       <span>End of policies</span>
       <p>We review this page as Serv.io evolves. Material changes will be communicated clearly.</p>
     </div>
-  </main>
+  </div>
 </div>

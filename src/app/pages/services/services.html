@@ -8,7 +8,7 @@
     </p>
   </div>
 
-  <div class="orbit" aria-label="Serv.io platform services">
+  <div class="orbit" [class.has-selection]="activeService()" aria-label="Serv.io platform services">
     <div class="orbit-ring ring-outer" aria-hidden="true"></div>
     <div class="orbit-ring ring-inner" aria-hidden="true"></div>
     <div class="orbit-center">
@@ -41,8 +41,6 @@
       <p class="eyebrow">Built to move together</p>
       <h2>From first scan to final receipt, every moment stays connected.</h2>
     </div>
-    <a routerLink="/about" fragment="demo"
-      >See Serv.io in action <span aria-hidden="true">↗</span></a
-    >
+    <a href="#demo">See Serv.io in action <span aria-hidden="true">↗</span></a>
   </div>
 </section>

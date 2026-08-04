@@ -6,8 +6,20 @@
 }
 
 .site-header {
-  border-bottom: 1px solid rgba(13, 13, 13, 0.06);
-  background: rgba(245, 240, 235, 0.86);
+  border-bottom: 1px solid transparent;
+  background: rgba(245, 240, 235, 0.18);
+  backdrop-filter: blur(7px);
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    backdrop-filter 0.3s ease;
+}
+
+.site-header.scrolled {
+  border-color: rgba(13, 13, 13, 0.07);
+  background: rgba(245, 240, 235, 0.9);
+  box-shadow: 0 12px 32px rgba(30, 42, 58, 0.08);
   backdrop-filter: blur(18px);
 }
 
@@ -19,6 +31,11 @@
   align-items: center;
   justify-content: space-between;
   gap: 30px;
+  transition: min-height 0.3s ease;
+}
+
+.scrolled .navbar {
+  min-height: 72px;
 }
 
 .logo {
@@ -28,6 +45,11 @@
   font-weight: 400;
   letter-spacing: -2px;
   text-decoration: none;
+  transition: font-size 0.3s ease;
+}
+
+.scrolled .logo {
+  font-size: 34px;
 }
 
 .logo span {
@@ -103,6 +125,10 @@
 @media (max-width: 900px) {
   .navbar {
     min-height: 76px;
+  }
+
+  .scrolled .navbar {
+    min-height: 68px;
   }
 
   .menu-toggle {

@@ -1,4 +1,12 @@
-import { afterNextRender, Component, HostListener, signal } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  DestroyRef,
+  ElementRef,
+  HostListener,
+  inject,
+  signal,
+} from '@angular/core';
 
 interface PolicySection {
   readonly id: string;
@@ -16,7 +24,13 @@ interface PolicySection {
   styleUrl: './policies.css',
 })
 export class Policies {
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private copyTimer = 0;
+
   protected readonly readingProgress = signal(0);
+  protected readonly activeSection = signal('privacy');
+  protected readonly copiedSection = signal<string | null>(null);
   protected readonly openSections = signal<readonly string[]>(['privacy']);
   protected readonly sections: readonly PolicySection[] = [
     {
@@ -26,7 +40,7 @@ export class Policies {
       summary: 'How we collect, use and respect information across the Serv.io platform.',
       paragraphs: [
         'Serv.io processes information needed to provide restaurant and café management services. This may include account details, venue information, transaction records, device data and support conversations supplied by users or generated through normal platform use.',
-        'We use this information to operate and improve the platform, authenticate users, deliver support, protect accounts, meet legal obligations and communicate important service updates. We do not sell personal information.',
+        'We use this information to operate and improve the platform, support account security, deliver assistance, protect users, meet legal obligations and communicate important service updates. We do not sell personal information.',
       ],
       bullets: [
         'Account and business contact information',
@@ -55,7 +69,7 @@ export class Policies {
       title: 'Cookie Policy',
       summary: 'A clear view of the small files that help Serv.io remain secure and useful.',
       paragraphs: [
-        'Serv.io uses essential cookies and similar browser storage to maintain sessions, remember preferences, prevent fraud and understand basic platform performance. Essential cookies are required for signed-in features to work correctly.',
+        'Serv.io uses essential cookies and similar browser storage to maintain sessions, remember preferences, prevent fraud and understand basic platform performance. Essential cookies are required for secure platform features to work correctly.',
         'Where optional analytics are used, users will be given appropriate choices. Browser settings can also block or remove cookies, although doing so may affect secure sessions and saved preferences.',
       ],
       bullets: [
@@ -113,6 +127,7 @@ export class Policies {
 
   constructor() {
     afterNextRender(() => this.updateReadingProgress());
+    this.destroyRef.onDestroy(() => clearTimeout(this.copyTimer));
   }
 
   @HostListener('window:scroll')
@@ -122,6 +137,7 @@ export class Policies {
       document.documentElement.scrollHeight - document.documentElement.clientHeight;
     const progress = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
     this.readingProgress.set(Math.min(100, Math.max(0, progress)));
+    this.updateActiveSection();
   }
 
   protected isOpen(id: string): boolean {
@@ -138,5 +154,36 @@ export class Policies {
     if (!this.isOpen(id)) {
       this.openSections.update((open) => [...open, id]);
     }
+  }
+
+  protected async copySectionLink(id: string): Promise<void> {
+    const url = `${window.location.origin}${window.location.pathname}#${id}`;
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      const field = document.createElement('textarea');
+      field.value = url;
+      field.setAttribute('readonly', '');
+      field.style.position = 'fixed';
+      field.style.opacity = '0';
+      document.body.appendChild(field);
+      field.select();
+      document.execCommand('copy');
+      field.remove();
+    }
+    this.copiedSection.set(id);
+    window.clearTimeout(this.copyTimer);
+    this.copyTimer = window.setTimeout(() => this.copiedSection.set(null), 1800);
+  }
+
+  private updateActiveSection(): void {
+    const sections = this.elementRef.nativeElement.querySelectorAll<HTMLElement>('.policy-section');
+    let active = sections[0]?.id ?? 'privacy';
+    sections.forEach((section) => {
+      if (section.getBoundingClientRect().top <= 180) {
+        active = section.id;
+      }
+    });
+    this.activeSection.set(active);
   }
 }

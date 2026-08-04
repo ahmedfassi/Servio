@@ -1,9 +1,19 @@
-<div class="home-page">
+<div class="home-page" id="home">
   <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-glow glow-orange" aria-hidden="true"></div>
+    <div class="hero-glow glow-cyan" aria-hidden="true"></div>
+
     <div class="hero-content">
       <div class="hero-label"><span class="label-dot"></span>Smarter restaurant management</div>
-
       <h1 id="hero-title">Run your restaurant <span>the smarter way.</span></h1>
+
+      <div class="rotating-message">
+        <span class="rotating-prefix">Built to</span>
+        <span class="rotating-viewport" aria-hidden="true">
+          <strong [attr.data-key]="messageIndex()">{{ rotatingMessages[messageIndex()] }}</strong>
+        </span>
+        <span class="sr-only">Manage faster, serve smarter, and grow effortlessly.</span>
+      </div>
 
       <p class="hero-description">
         Serv.io brings your menu, staff, tables, orders and payments together in one simple platform
@@ -11,9 +21,7 @@
       </p>
 
       <div class="hero-actions">
-        <a class="primary-button" routerLink="/services"
-          >Get started <span aria-hidden="true">→</span></a
-        >
+        <a class="primary-button" href="#services">Get started <span aria-hidden="true">→</span></a>
         <button class="secondary-button" type="button" (click)="scrollToFeatures()">
           Explore features
         </button>
@@ -38,7 +46,6 @@
           </div>
           <div class="profile-avatar" aria-label="Profile for A">A</div>
         </div>
-
         <div class="dashboard-stats">
           <article class="stat-card">
             <div class="stat-icon orange-icon" aria-hidden="true">↗</div>
@@ -55,7 +62,6 @@
             </div>
           </article>
         </div>
-
         <div class="table-section">
           <div class="section-heading">
             <div>
@@ -85,22 +91,143 @@
     </div>
   </section>
 
-  <section class="quick-stats" id="features" aria-label="Serv.io results">
+  <section
+    class="quick-stats"
+    id="features"
+    [class.stats-visible]="statsAnimated()"
+    aria-label="Serv.io results"
+  >
     <article>
-      <strong>40%</strong>
+      <strong>{{ statValue(0) }}</strong>
       <p>Faster order processing</p>
     </article>
     <article>
-      <strong>99.9%</strong>
+      <strong>{{ statValue(1) }}</strong>
       <p>Platform availability</p>
     </article>
     <article>
-      <strong>8+</strong>
+      <strong>{{ statValue(2) }}</strong>
       <p>Management tools</p>
     </article>
     <article>
-      <strong>24/7</strong>
+      <strong>{{ statValue(3) }}</strong>
       <p>Customer support</p>
     </article>
   </section>
+
+  <section class="floor-demo" aria-labelledby="floor-title">
+    <div class="floor-heading">
+      <div>
+        <p class="eyebrow">Live floor intelligence</p>
+        <h2 id="floor-title">See the whole room.<br /><span>Feel every moment.</span></h2>
+      </div>
+      <div class="floor-legend" aria-label="Table status legend">
+        <span><i class="available"></i>Available</span><span><i class="occupied"></i>Occupied</span
+        ><span><i class="preparing"></i>Preparing</span><span><i class="reserved"></i>Reserved</span
+        ><span><i class="payment-requested"></i>Payment</span>
+      </div>
+    </div>
+
+    <div class="floor-workspace">
+      <div class="floor-map" aria-label="Interactive restaurant floor">
+        <div class="floor-label">Main dining <span>8 tables</span></div>
+        <div class="kitchen-zone" aria-hidden="true"><span>Kitchen</span><i></i><i></i><i></i></div>
+        <div class="service-path" aria-hidden="true"></div>
+        @for (table of tables(); track table.number) {
+          <button
+            type="button"
+            [class]="'floor-table ' + table.position + ' ' + statusClass(table.status)"
+            [class.selected]="selectedTableNumber() === table.number"
+            [attr.aria-label]="'Table ' + table.number + ', ' + table.status"
+            [attr.aria-pressed]="selectedTableNumber() === table.number"
+            (click)="selectTable(table.number)"
+          >
+            <span>T{{ table.number.toString().padStart(2, '0') }}</span>
+            <small>{{ table.status }}</small>
+          </button>
+        }
+      </div>
+
+      <aside class="table-panel" aria-live="polite">
+        <div class="panel-topline">
+          <span>Selected table</span>
+          <button type="button" (click)="toggleLiveUpdates()" [attr.aria-pressed]="!liveUpdates()">
+            <i [class.paused]="!liveUpdates()"></i
+            >{{ liveUpdates() ? 'Pause updates' : 'Resume updates' }}
+          </button>
+        </div>
+        <div class="table-identity">
+          <strong>{{ selectedTable().number.toString().padStart(2, '0') }}</strong>
+          <div>
+            <span [class]="'status-chip ' + statusClass(selectedTable().status)">{{
+              selectedTable().status
+            }}</span>
+            <p>{{ selectedTable().orderStatus }}</p>
+          </div>
+        </div>
+        <dl>
+          <div>
+            <dt>Guests</dt>
+            <dd>{{ selectedTable().guests || '—' }}</dd>
+          </div>
+          <div>
+            <dt>Current amount</dt>
+            <dd>${{ selectedTable().amount.toFixed(2) }}</dd>
+          </div>
+          <div>
+            <dt>Elapsed</dt>
+            <dd>{{ selectedTable().elapsed }}</dd>
+          </div>
+        </dl>
+        <div class="panel-signal">
+          <span></span>
+          <p>Synced across floor, kitchen and checkout</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="product-flow" aria-labelledby="flow-title">
+    <div class="flow-heading">
+      <p class="eyebrow">One seamless guest journey</p>
+      <h2 id="flow-title">From first scan to<br /><span>final tap.</span></h2>
+    </div>
+    <div class="flow-path" aria-label="Serv.io product flow">
+      <div class="flow-line" aria-hidden="true"><span></span></div>
+      <article>
+        <span class="flow-number">01</span>
+        <div class="flow-icon qr-icon" aria-hidden="true"><i></i><i></i><i></i></div>
+        <h3>Scan QR</h3>
+        <p>Instant table recognition</p>
+      </article>
+      <article>
+        <span class="flow-number">02</span>
+        <div class="flow-icon menu-icon" aria-hidden="true"><i></i><i></i><i></i></div>
+        <h3>Browse menu</h3>
+        <p>Beautiful, live choices</p>
+      </article>
+      <article>
+        <span class="flow-number">03</span>
+        <div class="flow-icon order-flow-icon" aria-hidden="true">+</div>
+        <h3>Place order</h3>
+        <p>Clear, confident ordering</p>
+      </article>
+      <article>
+        <span class="flow-number">04</span>
+        <div class="flow-icon kitchen-icon" aria-hidden="true"><i></i><i></i></div>
+        <h3>Kitchen receives it</h3>
+        <p>No missed handoffs</p>
+      </article>
+      <article>
+        <span class="flow-number">05</span>
+        <div class="flow-icon pay-icon" aria-hidden="true">→</div>
+        <h3>Pay instantly</h3>
+        <p>A graceful finish</p>
+      </article>
+    </div>
+  </section>
+
+  <app-services id="services" />
+  <app-about id="about" />
+  <app-policies id="policies" />
 </div>

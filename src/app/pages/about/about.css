@@ -91,6 +91,7 @@
   display: block;
   background: linear-gradient(var(--orange), var(--cyan));
   animation: travel 5s ease-in-out infinite alternate;
+  box-shadow: 0 0 16px var(--cyan);
 }
 
 .journey-step {
@@ -100,6 +101,19 @@
   grid-template-columns: 1fr 1fr;
   align-items: center;
   gap: 110px;
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+}
+
+:host.reveal-enabled .journey-step {
+  opacity: 0;
+  transform: translateY(35px);
+}
+
+:host.reveal-enabled .journey-step.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .journey-step:nth-of-type(even) .step-copy {
