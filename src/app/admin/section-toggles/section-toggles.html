@@ -1,0 +1,31 @@
+<div class="toggles">
+  <header class="toggles-head">
+    <h1>Sections</h1>
+    <p>Control which sections appear on the homepage. Changes save immediately.</p>
+  </header>
+
+  <div class="toggle-list">
+    @for (s of sections; track s.id) {
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">{{ s.label }}</div>
+          <div class="toggle-hint">{{ s.hint }}</div>
+        </div>
+
+        <button
+          type="button"
+          class="switch"
+          [class.on]="isVisible(s.id)"
+          (click)="toggle(s.id)"
+          [attr.aria-pressed]="isVisible(s.id)"
+        >
+          <span class="switch-knob"></span>
+        </button>
+      </div>
+    }
+  </div>
+
+  @if (status()) {
+    <p class="status">{{ status() }}</p>
+  }
+</div>

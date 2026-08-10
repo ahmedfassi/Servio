@@ -4,6 +4,7 @@ import { ThemeService } from '../services/theme.service';
 import { I18nService } from '../services/i18n.service';
 import { TranslatePipe } from '../pipes/translate.pipe';
 import { ScrollRevealDirective } from '../scroll-reveal';
+import { ContentService } from '../services/content.service';
 
 type TableStatus = 'available' | 'occupied' | 'reserved' | 'checkout';
 
@@ -25,6 +26,7 @@ interface FlowStepDef {
 })
 
 export class Home implements OnInit, OnDestroy {
+  content = inject(ContentService);
   theme = inject(ThemeService);
   i18n = inject(I18nService);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));

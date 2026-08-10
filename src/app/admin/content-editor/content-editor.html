@@ -1,0 +1,33 @@
+<div class="editor">
+  <header class="editor-head">
+    <h1>Content</h1>
+    <p>Edit the text shown on the homepage and privacy page. Changes only go live after you click Save.</p>
+  </header>
+
+  <div class="lang-tabs">
+    <button type="button" [class.active]="lang() === 'en'" (click)="setLang('en')">English</button>
+    <button type="button" [class.active]="lang() === 'ar'" (click)="setLang('ar')">العربية</button>
+  </div>
+
+  @for (group of groups; track group.prefix) {
+    <details class="group" open>
+      <summary>{{ group.prefix }}</summary>
+      <div class="group-fields">
+        @for (key of group.keys; track key) {
+          <div class="field">
+            <label [for]="key">{{ key }}</label>
+            <textarea [id]="key" rows="2" [(ngModel)]="draft[lang()][key]" [ngModelOptions]="{ standalone: true }"></textarea>
+          </div>
+        }
+      </div>
+    </details>
+  }
+
+  <div class="editor-actions">
+    <button type="button" class="btn-ghost" (click)="resetFromServer()">Discard changes</button>
+    <button type="button" class="btn-primary" (click)="save()">Save</button>
+    @if (status()) {
+      <span class="status">{{ status() }}</span>
+    }
+  </div>
+</div>

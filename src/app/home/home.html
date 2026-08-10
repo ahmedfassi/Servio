@@ -141,6 +141,7 @@
   </div>
 </section>
 
+@if (content.sectionVisible('features')) {
 <section class="features" id="features">
   <div class="wrap">
     <div class="section-tag" appScrollReveal>{{ 'features.tag' | translate }}</div>
@@ -162,7 +163,9 @@
     </div>
   </div>
 </section>
+}
 
+@if (content.sectionVisible('flow')) {
 <section class="flow" id="flow">
   <div class="wrap">
     <div class="section-tag" appScrollReveal>{{ 'flow.tag' | translate }}</div>
@@ -182,7 +185,9 @@
     </div>
   </div>
 </section>
+}
 
+@if (content.sectionVisible('contact')) {
 <section class="contact" id="contact">
   <div class="wrap">
     <div class="contact-head" appScrollReveal>
@@ -283,6 +288,7 @@
     </div>
   </div>
 </section>
+}
 
 <footer>
   <div class="wrap">

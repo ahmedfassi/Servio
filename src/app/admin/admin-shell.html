@@ -1,0 +1,21 @@
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="admin-logo">Serv<span>.io</span> <small>Admin</small></div>
+
+    <nav class="admin-nav">
+      <a routerLink="content" routerLinkActive="active">Content</a>
+      <a routerLink="sections" routerLinkActive="active">Sections</a>
+    </nav>
+
+    <div class="admin-sidebar-bottom">
+      <button type="button" class="icon-toggle" (click)="theme.toggle()">
+        {{ theme.value() === 'dark' ? '☀️ Light' : '🌙 Dark' }}
+      </button>
+      <a href="/" class="view-site">View site →</a>
+    </div>
+  </aside>
+
+  <main class="admin-content">
+    <router-outlet />
+  </main>
+</div>
