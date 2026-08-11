@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ThemeService } from '../services/theme.service';
 import { I18nService } from '../services/i18n.service';
 import { TranslatePipe } from '../pipes/translate.pipe';
+import { ContentService } from '../services/content.service';
 
 type LegalTab = 'privacy' | 'terms';
 
@@ -13,6 +14,7 @@ type LegalTab = 'privacy' | 'terms';
   styleUrl: './privacy.css',
 })
 export class Privacy {
+  content = inject(ContentService);
   theme = inject(ThemeService);
   i18n = inject(I18nService);
   private readonly router = inject(Router);

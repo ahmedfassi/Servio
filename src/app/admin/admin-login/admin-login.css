@@ -1,0 +1,87 @@
+:host { display: block; }
+
+.login-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  padding: 24px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 360px;
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 16px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.login-logo {
+  font-family: 'Poiret One', cursive;
+  font-size: 26px;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.login-logo span { color: var(--sandy); }
+.login-logo small {
+  display: block;
+  font-family: 'Urbanist', sans-serif;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.field input {
+  font-family: inherit;
+  font-size: 14.5px;
+  color: var(--text);
+  background: var(--surface-alt);
+  border: 1.5px solid var(--surface-border);
+  border-radius: 10px;
+  padding: 11px 14px;
+}
+
+.field input:focus {
+  outline: none;
+  border-color: var(--cyan);
+}
+
+.login-error {
+  font-size: 13px;
+  color: var(--coral);
+  margin: -6px 0 0;
+}
+
+.btn-primary {
+  background: var(--sandy);
+  color: #0D0D0D;
+  font-weight: 700;
+  font-size: 14.5px;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

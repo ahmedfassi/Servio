@@ -4,16 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, of, tap } from 'rxjs';
 import { SiteContent, buildDefaultContent, SectionId } from './content.model';
 
-/**
- * Single source of truth for site copy + section visibility.
- *
- * Backend: PHP running under XAMPP.
- *   GET  http://localhost/servio-api/content.php  -> SiteContent
- *   PUT  http://localhost/servio-api/content.php  -> SiteContent (persists + echoes back)
- *
- * If XAMPP/Apache isn't running or the endpoint 404s, this falls back to the
- * static defaults in translations.ts so the site keeps working either way.
- */
 @Injectable({ providedIn: 'root' })
 export class ContentService {
   private readonly http = inject(HttpClient);

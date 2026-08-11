@@ -1,0 +1,23 @@
+<div class="login-wrap">
+  <form class="login-card" (ngSubmit)="submit()">
+    <div class="login-logo">Serv<span>.io</span> <small>Admin</small></div>
+
+    <div class="field">
+      <label for="username">Username</label>
+      <input id="username" name="username" type="text" [(ngModel)]="username" autocomplete="username" required />
+    </div>
+
+    <div class="field">
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" [(ngModel)]="password" autocomplete="current-password" required />
+    </div>
+
+    @if (error()) {
+      <p class="login-error">{{ error() }}</p>
+    }
+
+    <button type="submit" class="btn-primary" [disabled]="loading()">
+      {{ loading() ? 'Signing in…' : 'Sign in' }}
+    </button>
+  </form>
+</div>

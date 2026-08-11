@@ -11,11 +11,12 @@
 
   @for (group of groups; track group.prefix) {
     <details class="group" open>
-      <summary>{{ group.prefix }}</summary>
+      <summary>{{ group.label }}</summary>
       <div class="group-fields">
         @for (key of group.keys; track key) {
           <div class="field">
-            <label [for]="key">{{ key }}</label>
+            <label [for]="key">{{ fieldLabel(key) }}</label>
+            <span class="field-key">{{ key }}</span>
             <textarea [id]="key" rows="2" [(ngModel)]="draft[lang()][key]" [ngModelOptions]="{ standalone: true }"></textarea>
           </div>
         }

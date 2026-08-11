@@ -2,7 +2,8 @@
 
 .admin-layout {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;        /* was min-height: 100vh */
+  overflow: hidden;      /* prevent the body itself from scrolling */
   background: var(--bg);
   color: var(--text);
 }
@@ -10,6 +11,8 @@
 .admin-sidebar {
   width: 240px;
   flex-shrink: 0;
+  height: 100vh;         /* pin it to full viewport height */
+  overflow-y: auto;       /* only scrolls itself if the nav list ever grows tall */
   background: var(--surface);
   border-right: 1px solid var(--surface-border);
   padding: 24px 18px;
@@ -87,9 +90,11 @@
 }
 
 @media (max-width: 720px) {
-  .admin-layout { flex-direction: column; }
+  .admin-layout { flex-direction: column; height: 100vh; }
   .admin-sidebar {
     width: auto;
+    height: auto;       /* undo the fixed height for the horizontal layout */
+    overflow: visible;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;

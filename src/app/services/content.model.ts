@@ -1,6 +1,4 @@
-import { TRANSLATIONS , Lang } from './translations';
-
-export type { Lang };
+export type Lang = 'en' | 'ar';
 
 export type SectionId = 'about' | 'features' | 'flow' | 'contact';
 
@@ -18,8 +16,11 @@ export const DEFAULT_SECTION_VISIBILITY: Record<SectionId, boolean> = {
 
 export function buildDefaultContent(): SiteContent {
   return {
-    // Deep-clone so admin-panel edits never mutate the static defaults.
-    translations: JSON.parse(JSON.stringify(TRANSLATIONS)),
+    // Empty until the API responds. Content now lives entirely in the
+    // database — see ContentService — so there's no static fallback text
+    // anymore. TranslatePipe/I18nService.t() falls back to showing the raw
+    // key if a translation isn't loaded yet.
+    translations: { en: {}, ar: {} },
     sectionVisibility: { ...DEFAULT_SECTION_VISIBILITY },
   };
 }

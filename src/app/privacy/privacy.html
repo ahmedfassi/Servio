@@ -3,10 +3,18 @@
     <a href="/"><div class="logo">Serv<span>.io</span></div></a>
 
     <div class="nav-links">
+      @if (content.sectionVisible('about')) {
       <a href="/#about" (click)="goToHomeSection('about', $event)">{{ 'nav.about' | translate }}</a>
+      }
+      @if (content.sectionVisible('features')) {
       <a href="/#features" (click)="goToHomeSection('features', $event)">{{ 'nav.features' | translate }}</a>
+      }
+      @if (content.sectionVisible('flow')) {
       <a href="/#flow" (click)="goToHomeSection('flow', $event)">{{ 'nav.flow' | translate }}</a>
+      }
+      @if (content.sectionVisible('contact')) {
       <a href="/#contact" (click)="goToHomeSection('contact', $event)">{{ 'nav.contact' | translate }}</a>
+      }
     </div>
 
     <div class="nav-actions">

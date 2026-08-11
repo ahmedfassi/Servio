@@ -3,10 +3,18 @@
     <a href=""><div class="logo">Serv<span>.io</span></div></a>
 
     <div class="nav-links">
+      @if (content.sectionVisible('about')) {
       <a href="#about" (click)="scrollToSection('about', $event)">{{ 'nav.about' | translate }}</a>
+      }
+      @if (content.sectionVisible('features')) {
       <a href="#features" (click)="scrollToSection('features', $event)">{{ 'nav.features' | translate }}</a>
+      }
+      @if (content.sectionVisible('flow')) {
       <a href="#flow" (click)="scrollToSection('flow', $event)">{{ 'nav.flow' | translate }}</a>
+      }
+      @if (content.sectionVisible('contact')) {
       <a href="#contact" (click)="scrollToSection('contact', $event)">{{ 'nav.contact' | translate }}</a>
+      }
     </div>
 
     <div class="nav-actions">
@@ -106,6 +114,7 @@
   </div>
 </section>
 
+@if (content.sectionVisible('about')) {
 <section class="about" id="about">
   <div class="wrap about-grid">
     <div appScrollReveal [revealVariant]="'left'">
@@ -140,6 +149,7 @@
     </div>
   </div>
 </section>
+}
 
 @if (content.sectionVisible('features')) {
 <section class="features" id="features">
