@@ -1,10 +1,12 @@
 import { Component, inject, signal, OnInit, OnDestroy, PLATFORM_ID, afterNextRender } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ThemeService } from '../services/theme.service';
 import { I18nService } from '../services/i18n.service';
 import { TranslatePipe } from '../pipes/translate.pipe';
 import { ScrollRevealDirective } from '../scroll-reveal';
 import { ContentService } from '../services/content.service';
+import { ContactService, ContactSubmission } from '../services/contact.service';
 
 type TableStatus = 'available' | 'occupied' | 'reserved' | 'checkout';
 
@@ -18,9 +20,11 @@ interface FlowStepDef {
   key: string; // matches flow.step<N>Title / flow.step<N>Desc
 }
 
+type ContactStatus = 'idle' | 'sending' | 'success' | 'error';
+
 @Component({
   selector: 'app-root',
-  imports: [TranslatePipe, ScrollRevealDirective],
+  imports: [TranslatePipe, ScrollRevealDirective, FormsModule],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -29,6 +33,7 @@ export class Home implements OnInit, OnDestroy {
   content = inject(ContentService);
   theme = inject(ThemeService);
   i18n = inject(I18nService);
+  private readonly contactService = inject(ContactService);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   readonly features: FeatureDef[] = [
@@ -52,6 +57,39 @@ export class Home implements OnInit, OnDestroy {
   private reduceMotion = false;
   // Mobile navbar state
   readonly mobileMenuOpen = signal(false);
+
+  // --- Contact form state ---
+  contactForm: ContactSubmission = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    subject: 'partnership',
+    message: '',
+  };
+  readonly contactStatus = signal<ContactStatus>('idle');
+
+  submitContact(): void {
+    if (this.contactStatus() === 'sending') return;
+    this.contactStatus.set('sending');
+
+    this.contactService.submit(this.contactForm).subscribe({
+      next: () => {
+        this.contactStatus.set('success');
+        this.contactForm = {
+          firstName: '',
+          lastName: '',
+          email: '',
+          phone: '',
+          subject: 'partnership',
+          message: '',
+        };
+      },
+      error: () => {
+        this.contactStatus.set('error');
+      },
+    });
+  }
 
   toggleMobileMenu(): void {
     this.mobileMenuOpen.update((v) => !v);
@@ -135,5 +173,5 @@ export class Home implements OnInit, OnDestroy {
       current.map((t, i) => (i === idx ? { ...t, status: next } : t))
     );
   }
-  
+
 }

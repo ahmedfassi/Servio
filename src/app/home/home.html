@@ -236,65 +236,100 @@
         </span>
       </div>
 
-      <form class="contact-form" action="mailto:hello@servio.app" method="post" enctype="text/plain">
-        <div class="form-row">
-          <div class="field">
-            <input type="text" name="firstName" id="cf-first" placeholder=" " required />
-            <label for="cf-first">{{ 'contact.firstName' | translate }}</label>
-          </div>
-          <div class="field">
-            <input type="text" name="lastName" id="cf-last" placeholder=" " required />
-            <label for="cf-last">{{ 'contact.lastName' | translate }}</label>
-          </div>
+      @if (contactStatus() === 'success') {
+        <div class="contact-form-status success">
+          {{ i18n.value() === 'ar' ? 'شكراً لك! تم إرسال رسالتك بنجاح.' : 'Thanks! Your message has been sent.' }}
         </div>
+      } @else {
 
-        <div class="form-row">
+        @if (contactStatus() === 'error') {
+          <div class="contact-form-status error">
+            {{ i18n.value() === 'ar' ? 'حدث خطأ أثناء الإرسال، حاول مجدداً.' : 'Something went wrong sending your message. Please try again.' }}
+          </div>
+        }
+
+        <form class="contact-form" #contactFormRef="ngForm" (ngSubmit)="contactFormRef.valid && submitContact()">
+          <div class="form-row">
+            <div class="field">
+              <input
+                type="text" name="firstName" id="cf-first" placeholder=" " required
+                [(ngModel)]="contactForm.firstName"
+                [disabled]="contactStatus() === 'sending'"
+              />
+              <label for="cf-first">{{ 'contact.firstName' | translate }}</label>
+            </div>
+            <div class="field">
+              <input
+                type="text" name="lastName" id="cf-last" placeholder=" " required
+                [(ngModel)]="contactForm.lastName"
+                [disabled]="contactStatus() === 'sending'"
+              />
+              <label for="cf-last">{{ 'contact.lastName' | translate }}</label>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <input
+                type="email" name="email" id="cf-email" placeholder=" " required
+                [(ngModel)]="contactForm.email"
+                [disabled]="contactStatus() === 'sending'"
+              />
+              <label for="cf-email">{{ 'contact.formEmail' | translate }}</label>
+            </div>
+            <div class="field">
+              <input
+                type="tel" name="phone" id="cf-phone" placeholder=" "
+                [(ngModel)]="contactForm.phone"
+                [disabled]="contactStatus() === 'sending'"
+              />
+              <label for="cf-phone">{{ 'contact.phoneLabel' | translate }}</label>
+            </div>
+          </div>
+
+          <div class="subject-block">
+            <span class="subject-title">{{ 'contact.subjectLabel' | translate }}</span>
+            <div class="subject-pills">
+              <label class="pill-option">
+                <input type="radio" name="subject" value="partnership" [(ngModel)]="contactForm.subject" [disabled]="contactStatus() === 'sending'" />
+                <span>{{ 'contact.subjectPartnership' | translate }}</span>
+              </label>
+              <label class="pill-option">
+                <input type="radio" name="subject" value="business" [(ngModel)]="contactForm.subject" [disabled]="contactStatus() === 'sending'" />
+                <span>{{ 'contact.subjectBusiness' | translate }}</span>
+              </label>
+              <label class="pill-option">
+                <input type="radio" name="subject" value="userInquiry" [(ngModel)]="contactForm.subject" [disabled]="contactStatus() === 'sending'" />
+                <span>{{ 'contact.subjectUserInquiry' | translate }}</span>
+              </label>
+              <label class="pill-option">
+                <input type="radio" name="subject" value="appInquiry" [(ngModel)]="contactForm.subject" [disabled]="contactStatus() === 'sending'" />
+                <span>{{ 'contact.subjectAppInquiry' | translate }}</span>
+              </label>
+            </div>
+          </div>
+
           <div class="field">
-            <input type="email" name="email" id="cf-email" placeholder=" " required />
-            <label for="cf-email">{{ 'contact.formEmail' | translate }}</label>
+            <textarea
+              name="message" id="cf-message" rows="3" placeholder=" " required
+              [(ngModel)]="contactForm.message"
+              [disabled]="contactStatus() === 'sending'"
+            ></textarea>
+            <label for="cf-message">{{ 'contact.formMessage' | translate }}</label>
           </div>
-          <div class="field">
-            <input type="tel" name="phone" id="cf-phone" placeholder=" " />
-            <label for="cf-phone">{{ 'contact.phoneLabel' | translate }}</label>
+
+          <div class="form-submit-row">
+            <button type="submit" class="btn-send" [disabled]="contactStatus() === 'sending'">
+              {{ contactStatus() === 'sending'
+                  ? (i18n.value() === 'ar' ? 'جارٍ الإرسال...' : 'Sending...')
+                  : ('contact.formSend' | translate) }}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </button>
           </div>
-        </div>
-
-        <div class="subject-block">
-          <span class="subject-title">{{ 'contact.subjectLabel' | translate }}</span>
-          <div class="subject-pills">
-            <label class="pill-option">
-              <input type="radio" name="subject" value="partnership" checked />
-              <span>{{ 'contact.subjectPartnership' | translate }}</span>
-            </label>
-            <label class="pill-option">
-              <input type="radio" name="subject" value="business" />
-              <span>{{ 'contact.subjectBusiness' | translate }}</span>
-            </label>
-            <label class="pill-option">
-              <input type="radio" name="subject" value="userInquiry" />
-              <span>{{ 'contact.subjectUserInquiry' | translate }}</span>
-            </label>
-            <label class="pill-option">
-              <input type="radio" name="subject" value="appInquiry" />
-              <span>{{ 'contact.subjectAppInquiry' | translate }}</span>
-            </label>
-          </div>
-        </div>
-
-        <div class="field">
-          <textarea name="message" id="cf-message" rows="3" placeholder=" " required></textarea>
-          <label for="cf-message">{{ 'contact.formMessage' | translate }}</label>
-        </div>
-
-        <div class="form-submit-row">
-          <button type="submit" class="btn-send">
-            {{ 'contact.formSend' | translate }}
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14M13 6l6 6-6 6"/>
-            </svg>
-          </button>
-        </div>
-      </form>
+        </form>
+      }
     </div>
   </div>
 </section>
