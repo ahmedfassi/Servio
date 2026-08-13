@@ -12,14 +12,23 @@
           type="button"
           (click)="openCategory()"
         >
-          Add Category</button
-        ><button
-          class="primary-button admin-btn admin-btn-primary"
-          type="button"
-          (click)="openItem()"
-        >
-          Add Menu Item
+          Add Category
         </button>
+        <div class="menu-item-action">
+          <button
+            class="primary-button admin-btn admin-btn-primary"
+            type="button"
+            [disabled]="!canAddMenuItem()"
+            [attr.aria-describedby]="!canAddMenuItem() ? 'menu-item-action-hint' : null"
+            [attr.title]="menuItemActionHint() || null"
+            (click)="openItem()"
+          >
+            Add Menu Item
+          </button>
+          @if (!canAddMenuItem()) {
+            <span id="menu-item-action-hint" class="action-hint">{{ menuItemActionHint() }}</span>
+          }
+        </div>
       </div>
     </div>
     @if (successMessage()) {
@@ -27,6 +36,22 @@
     }
     @if (errorMessage()) {
       <div class="message error" role="alert">{{ errorMessage() }}</div>
+    }
+    @if (!loading() && !categoryErrorMessage() && !hasCategories()) {
+      <section class="category-prerequisite" aria-labelledby="category-prerequisite-title">
+        <span class="prerequisite-icon" aria-hidden="true">#</span>
+        <div>
+          <strong id="category-prerequisite-title">Create a category first</strong>
+          <span>Create at least one category before adding menu items.</span>
+        </div>
+        <button
+          class="primary-button admin-btn admin-btn-primary"
+          type="button"
+          (click)="openCategory()"
+        >
+          Add Category
+        </button>
+      </section>
     }
     <section class="stats-row admin-stat-grid">
       <article class="metric admin-stat-card">
@@ -58,7 +83,9 @@
       <section class="panel admin-card">
         <div class="panel-header admin-card-header">
           <div>
-            <h3>Menu items</h3>
+            <h3>
+              Menu items <span class="section-count">{{ items().length }}</span>
+            </h3>
             <p>Actual items stored in MongoDB</p>
           </div>
           <div class="toolbar admin-toolbar">
@@ -143,8 +170,27 @@
                     <td class="empty" colspan="5">
                       <div class="admin-empty-state">
                         <span class="empty-icon" aria-hidden="true">☰</span>
-                        <strong>No menu items yet</strong>
-                        <span>Add your first item to start building the restaurant menu.</span>
+                        @if (hasCategories()) {
+                          <strong>No menu items yet</strong>
+                          <span>Add your first item to start building the restaurant menu.</span>
+                          <button
+                            class="primary-button admin-btn admin-btn-primary empty-state-action"
+                            type="button"
+                            (click)="openItem()"
+                          >
+                            Add Menu Item
+                          </button>
+                        } @else {
+                          <strong>Create a category first</strong>
+                          <span>Menu items need a category before they can be created.</span>
+                          <button
+                            class="primary-button admin-btn admin-btn-primary empty-state-action"
+                            type="button"
+                            (click)="openCategory()"
+                          >
+                            Add Category
+                          </button>
+                        }
                       </div>
                     </td>
                   </tr>
@@ -157,38 +203,76 @@
       <section class="panel admin-card categories-panel">
         <div class="panel-header admin-card-header">
           <div>
-            <h3>Categories</h3>
+            <h3>
+              Categories <span class="section-count">{{ categories().length }}</span>
+            </h3>
             <p>Organize your menu</p>
           </div>
+          <button
+            class="primary-button admin-btn admin-btn-primary"
+            type="button"
+            (click)="openCategory()"
+          >
+            Add Category
+          </button>
         </div>
         <div class="category-list">
-          @for (category of categories(); track category._id) {
-            <article>
-              <div>
-                <strong>{{ category.name }}</strong
-                ><span>{{ category.description || 'No description' }}</span>
-              </div>
-              <span [class]="'status-badge ' + (category.active ? 'active' : 'inactive')">{{
-                category.active ? 'Active' : 'Inactive'
-              }}</span>
-              <div class="row-actions">
-                <button type="button" (click)="openCategory(category)">Edit</button
-                ><button
-                  class="danger"
+          @if (loading() && !hasCategories()) {
+            <div class="state category-loading-state">
+              <span class="spinner"></span><span>Loading categories...</span>
+            </div>
+          } @else if (categoryErrorMessage() && !hasCategories()) {
+            <div class="admin-empty-state compact category-error-state" role="alert">
+              <span class="empty-icon" aria-hidden="true">!</span>
+              <strong>Categories could not be loaded</strong>
+              <span>{{ categoryErrorMessage() }}</span>
+              <button
+                class="secondary-button admin-btn admin-btn-secondary empty-state-action"
+                type="button"
+                (click)="reload()"
+              >
+                Try Again
+              </button>
+            </div>
+          } @else {
+            @if (categoryErrorMessage()) {
+              <div class="category-inline-error" role="alert">{{ categoryErrorMessage() }}</div>
+            }
+            @for (category of categories(); track category._id) {
+              <article>
+                <div>
+                  <strong>{{ category.name }}</strong
+                  ><span>{{ category.description || 'No description' }}</span>
+                </div>
+                <span [class]="'status-badge ' + (category.active ? 'active' : 'inactive')">{{
+                  category.active ? 'Active' : 'Inactive'
+                }}</span>
+                <div class="row-actions">
+                  <button type="button" (click)="openCategory(category)">Edit</button
+                  ><button
+                    class="danger"
+                    type="button"
+                    [disabled]="deletingId() !== null"
+                    (click)="deleteCategory(category)"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </article>
+            } @empty {
+              <div class="admin-empty-state compact">
+                <span class="empty-icon" aria-hidden="true">#</span>
+                <strong>No categories yet</strong>
+                <span>Create your first category before adding menu items.</span>
+                <button
+                  class="primary-button admin-btn admin-btn-primary empty-state-action"
                   type="button"
-                  [disabled]="deletingId() !== null"
-                  (click)="deleteCategory(category)"
+                  (click)="openCategory()"
                 >
-                  Delete
+                  Add Category
                 </button>
               </div>
-            </article>
-          } @empty {
-            <div class="admin-empty-state compact">
-              <span class="empty-icon" aria-hidden="true">#</span>
-              <strong>No categories yet</strong>
-              <span>Create a category to organize your menu.</span>
-            </div>
+            }
           }
         </div>
       </section>

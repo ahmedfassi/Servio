@@ -1,6 +1,62 @@
 :host {
   display: block;
 }
+.menu-item-action {
+  display: grid;
+  justify-items: end;
+  gap: 6px;
+}
+.action-hint {
+  max-width: 260px;
+  color: #a65f25;
+  font-size: 10px;
+  font-weight: 650;
+  line-height: 1.35;
+  text-align: right;
+}
+.category-prerequisite {
+  margin-bottom: 18px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border: 1px solid #f1c99f;
+  border-radius: 15px;
+  color: #6d4728;
+  background: #fff8f0;
+}
+.prerequisite-icon {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  color: #fff;
+  background: var(--admin-orange);
+  font-weight: 850;
+}
+.category-prerequisite > div {
+  display: grid;
+  gap: 3px;
+}
+.category-prerequisite > div span {
+  color: #946d4b;
+  font-size: 11px;
+}
+.category-prerequisite button {
+  margin-left: auto;
+  flex: none;
+}
+.section-count {
+  margin-left: 5px;
+  padding: 3px 7px;
+  border-radius: 999px;
+  color: #a85c22;
+  background: #fff0e2;
+  font-size: 10px;
+  vertical-align: 2px;
+}
 .services-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.7fr) minmax(280px, 0.7fr);
@@ -49,6 +105,29 @@ button.status-badge {
 .category-list {
   padding: 10px 20px 20px;
 }
+.category-loading-state {
+  min-height: 170px !important;
+}
+.category-inline-error {
+  margin-top: 10px;
+  padding: 11px 12px;
+  border: 1px solid #efd0cb;
+  border-radius: 10px;
+  color: #9b4a43;
+  background: #fff5f3;
+  font-size: 11px;
+  line-height: 1.45;
+}
+.empty-state-action {
+  margin-top: 15px;
+}
+.admin-empty-state > span:not(.empty-icon) {
+  max-width: 420px;
+  margin-top: 6px;
+  color: #8f99a5;
+  font-size: 11px;
+  line-height: 1.5;
+}
 .category-list article {
   margin-top: 10px;
   padding: 15px;
@@ -78,6 +157,22 @@ button.status-badge {
   border-top: 1px solid #edf0f2;
 }
 @media (max-width: 580px) {
+  .category-prerequisite {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .category-prerequisite button {
+    width: 100%;
+    margin-left: 0;
+  }
+  .menu-item-action {
+    width: 100%;
+    justify-items: stretch;
+  }
+  .action-hint {
+    max-width: none;
+    text-align: left;
+  }
   .category-list article {
     grid-template-columns: 1fr;
   }

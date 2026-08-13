@@ -4,7 +4,7 @@ import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable, forkJoin } from 'rxjs';
+import { Observable, catchError, forkJoin, map, of } from 'rxjs';
 import { AdminLayout } from '../../components/admin-layout/admin-layout';
 import { AuthService } from '../../core/auth/auth.service';
 import { Category, CategoryInput, CategoryService } from '../../core/services/category.service';
@@ -14,6 +14,9 @@ interface ApiErrorBody {
   readonly message?: unknown;
 }
 type FormKind = 'item' | 'category' | null;
+type LoadResult<T> =
+  | { readonly value: T; readonly error: null }
+  | { readonly value: null; readonly error: HttpErrorResponse };
 
 @Component({
   selector: 'app-admin-services',
@@ -34,6 +37,7 @@ export class AdminServices {
   protected readonly saving = signal(false);
   protected readonly deletingId = signal<string | null>(null);
   protected readonly errorMessage = signal('');
+  protected readonly categoryErrorMessage = signal('');
   protected readonly successMessage = signal('');
   protected readonly formKind = signal<FormKind>(null);
   protected readonly editingId = signal<string | null>(null);
@@ -48,6 +52,15 @@ export class AdminServices {
   protected readonly availableCount = computed(
     () => this.items().filter((item) => item.available).length,
   );
+  protected readonly hasCategories = computed(() => this.categories().length > 0);
+  protected readonly canAddMenuItem = computed(() => !this.loading() && this.hasCategories());
+  protected readonly menuItemActionHint = computed(() => {
+    if (this.loading()) return 'Categories are still loading.';
+    if (this.hasCategories()) return '';
+    return this.categoryErrorMessage()
+      ? 'Categories could not be loaded. Refresh the page before adding menu items.'
+      : 'Create at least one category before adding menu items.';
+  });
   protected readonly itemForm = new FormGroup({
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     description: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -71,6 +84,10 @@ export class AdminServices {
     this.search.set((event.target as HTMLInputElement).value);
   }
   protected openItem(item?: MenuItem): void {
+    if (!this.canAddMenuItem()) {
+      if (!this.loading()) this.errorMessage.set(this.menuItemActionHint());
+      return;
+    }
     this.editingId.set(item?._id ?? null);
     this.errorMessage.set('');
     this.successMessage.set('');
@@ -80,7 +97,7 @@ export class AdminServices {
             name: item.name,
             description: item.description,
             price: item.price,
-            category: item.category,
+            category: this.categoryExists(item.category) ? item.category : this.preferredCategory(),
             image: item.image,
             available: item.available,
           }
@@ -88,7 +105,7 @@ export class AdminServices {
             name: '',
             description: '',
             price: 0,
-            category: this.categories().find((category) => category.active)?.name ?? '',
+            category: this.preferredCategory(),
             image: '',
             available: true,
           },
@@ -110,6 +127,16 @@ export class AdminServices {
     if (!this.saving()) this.formKind.set(null);
   }
   protected saveItem(): void {
+    if (!this.canAddMenuItem()) {
+      this.errorMessage.set(this.menuItemActionHint());
+      return;
+    }
+    const categoryControl = this.itemForm.controls.category;
+    if (!this.categoryExists(categoryControl.value)) {
+      categoryControl.setErrors({ categoryUnavailable: true });
+      this.errorMessage.set('Select one of the available categories before saving.');
+      return;
+    }
     if (this.itemForm.invalid || this.saving()) {
       this.itemForm.markAllAsTouched();
       return;
@@ -126,12 +153,28 @@ export class AdminServices {
       return;
     }
     const value: CategoryInput = this.categoryForm.getRawValue();
-    this.saveRequest(
-      this.editingId()
-        ? this.categoriesApi.update(this.editingId()!, value)
-        : this.categoriesApi.create(value),
-      this.editingId() ? 'Category updated.' : 'Category added.',
-    );
+    const editingId = this.editingId();
+    const request = editingId
+      ? this.categoriesApi.update(editingId, value)
+      : this.categoriesApi.create(value);
+    this.saving.set(true);
+    this.errorMessage.set('');
+    request.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (category) => {
+        const categories = editingId
+          ? this.categories().map((current) => (current._id === editingId ? category : current))
+          : [...this.categories(), category];
+        this.setCategories(categories);
+        this.saving.set(false);
+        this.formKind.set(null);
+        this.successMessage.set(editingId ? 'Category updated.' : 'Category added.');
+        this.refreshCategories();
+      },
+      error: (error: HttpErrorResponse) => {
+        this.saving.set(false);
+        this.handleError(error, 'Category could not be saved.');
+      },
+    });
   }
   protected toggleAvailability(item: MenuItem): void {
     this.saving.set(true);
@@ -210,20 +253,79 @@ export class AdminServices {
   private load(clearMessages = true): void {
     this.loading.set(true);
     this.errorMessage.set('');
+    this.categoryErrorMessage.set('');
     if (clearMessages) this.successMessage.set('');
-    forkJoin({ items: this.menuApi.getAll(), categories: this.categoriesApi.getAll() })
+    forkJoin({
+      items: this.captureLoad(this.menuApi.getAll()),
+      categories: this.captureLoad(this.categoriesApi.getAll()),
+    })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: ({ items, categories }) => {
-          this.items.set(items);
-          this.categories.set(categories);
+          if (items.value) this.items.set(items.value);
+          else this.handleError(items.error, 'Menu items could not be loaded.');
+
+          if (categories.value) this.setCategories(categories.value);
+          else {
+            const message = this.errorText(
+              categories.error,
+              'Categories could not be loaded. Add Menu Item is unavailable until categories load.',
+            );
+            this.categoryErrorMessage.set(message);
+            this.handleError(categories.error, message);
+          }
           this.loading.set(false);
-        },
-        error: (error: HttpErrorResponse) => {
-          this.loading.set(false);
-          this.handleError(error, 'Menu data could not be loaded.');
         },
       });
+  }
+  private captureLoad<T>(request: Observable<T>): Observable<LoadResult<T>> {
+    return request.pipe(
+      map((value) => ({ value, error: null }) as LoadResult<T>),
+      catchError((error: HttpErrorResponse) => of({ value: null, error } as LoadResult<T>)),
+    );
+  }
+  private refreshCategories(): void {
+    this.categoryErrorMessage.set('');
+    this.categoriesApi
+      .getAll()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (categories) => this.setCategories(categories),
+        error: (error: HttpErrorResponse) => {
+          const message = this.errorText(error, 'Categories could not be refreshed.');
+          this.categoryErrorMessage.set(message);
+          this.handleError(error, message);
+        },
+      });
+  }
+  private setCategories(categories: readonly Category[]): void {
+    const sorted = [...categories].sort((first, second) => first.name.localeCompare(second.name));
+    this.categories.set(sorted);
+    if (this.formKind() !== 'item') return;
+    if (sorted.length === 0) {
+      this.formKind.set(null);
+      this.errorMessage.set('Create at least one category before adding menu items.');
+      return;
+    }
+    const categoryControl = this.itemForm.controls.category;
+    if (!this.categoryExists(categoryControl.value)) {
+      categoryControl.setValue(this.preferredCategory());
+    }
+  }
+  private preferredCategory(): string {
+    return (
+      this.categories().find((category) => category.active)?.name ??
+      this.categories()[0]?.name ??
+      ''
+    );
+  }
+  private categoryExists(name: string): boolean {
+    return this.categories().some((category) => category.name === name);
+  }
+  private errorText(error: HttpErrorResponse, fallback: string): string {
+    if (error.status === 0) return 'The Serv.io server is unavailable.';
+    const body = error.error as ApiErrorBody | null;
+    return typeof body?.message === 'string' ? body.message : fallback;
   }
   private handleError(error: HttpErrorResponse, fallback: string): void {
     if (error.status === 401) {
@@ -231,11 +333,6 @@ export class AdminServices {
       void this.router.navigate(['/login'], { queryParams: { returnUrl: '/admin/services' } });
       return;
     }
-    if (error.status === 0) {
-      this.errorMessage.set('The Serv.io server is unavailable.');
-      return;
-    }
-    const body = error.error as ApiErrorBody | null;
-    this.errorMessage.set(typeof body?.message === 'string' ? body.message : fallback);
+    this.errorMessage.set(this.errorText(error, fallback));
   }
 }
