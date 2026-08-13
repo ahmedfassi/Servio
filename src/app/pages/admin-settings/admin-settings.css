@@ -1,0 +1,74 @@
+:host {
+  display: block;
+}
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-areas:
+    'restaurant profile'
+    'restaurant security';
+  align-items: start;
+  gap: 18px;
+}
+.restaurant-card {
+  grid-area: restaurant;
+}
+.profile-card {
+  grid-area: profile;
+}
+.security-card {
+  grid-area: security;
+}
+.settings-card-header {
+  justify-content: flex-start;
+}
+.settings-section-icon {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  font-size: 17px;
+  font-weight: 800;
+}
+.settings-section-icon.restaurant {
+  background: #fff0df;
+  color: #dc6d13;
+}
+.settings-section-icon.profile {
+  background: #eaf2ff;
+  color: #3d6fc4;
+}
+.settings-section-icon.security {
+  background: #e7f7ef;
+  color: #24885d;
+}
+.settings-card form {
+  padding: 22px;
+  display: grid;
+  gap: 15px;
+}
+.settings-card button {
+  justify-self: start;
+}
+.settings-card small {
+  color: #8d97a3;
+}
+@media (max-width: 850px) {
+  .settings-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'restaurant'
+      'profile'
+      'security';
+  }
+}
+@media (max-width: 580px) {
+  .settings-card form {
+    padding: 18px;
+  }
+  .settings-card button {
+    width: 100%;
+  }
+}

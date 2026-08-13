@@ -1,0 +1,279 @@
+<app-admin-layout eyebrow="Management" title="Services">
+  <main class="management-content admin-page">
+    <div class="page-heading admin-page-header">
+      <div>
+        <p>Menu management</p>
+        <h2>Services & Menu</h2>
+        <span>Manage menu items, availability, pricing, and categories.</span>
+      </div>
+      <div class="toolbar admin-page-actions">
+        <button
+          class="secondary-button admin-btn admin-btn-secondary"
+          type="button"
+          (click)="openCategory()"
+        >
+          Add Category</button
+        ><button
+          class="primary-button admin-btn admin-btn-primary"
+          type="button"
+          (click)="openItem()"
+        >
+          Add Menu Item
+        </button>
+      </div>
+    </div>
+    @if (successMessage()) {
+      <div class="message success" role="status">{{ successMessage() }}</div>
+    }
+    @if (errorMessage()) {
+      <div class="message error" role="alert">{{ errorMessage() }}</div>
+    }
+    <section class="stats-row admin-stat-grid">
+      <article class="metric admin-stat-card">
+        <span class="metric-icon blue" aria-hidden="true">☰</span>
+        <div class="metric-copy">
+          <span>Menu items</span><strong>{{ items().length }}</strong>
+        </div>
+      </article>
+      <article class="metric admin-stat-card">
+        <span class="metric-icon green" aria-hidden="true">✓</span>
+        <div class="metric-copy">
+          <span>Available</span><strong>{{ availableCount() }}</strong>
+        </div>
+      </article>
+      <article class="metric admin-stat-card">
+        <span class="metric-icon red" aria-hidden="true">×</span>
+        <div class="metric-copy">
+          <span>Unavailable</span><strong>{{ items().length - availableCount() }}</strong>
+        </div>
+      </article>
+      <article class="metric admin-stat-card">
+        <span class="metric-icon amber" aria-hidden="true">#</span>
+        <div class="metric-copy">
+          <span>Categories</span><strong>{{ categories().length }}</strong>
+        </div>
+      </article>
+    </section>
+    <div class="services-grid">
+      <section class="panel admin-card">
+        <div class="panel-header admin-card-header">
+          <div>
+            <h3>Menu items</h3>
+            <p>Actual items stored in MongoDB</p>
+          </div>
+          <div class="toolbar admin-toolbar">
+            <input
+              class="admin-search"
+              type="search"
+              placeholder="Search menu"
+              (input)="setSearch($event)"
+            /><button
+              class="refresh-button admin-btn admin-btn-secondary"
+              type="button"
+              (click)="reload()"
+            >
+              Refresh
+            </button>
+          </div>
+        </div>
+        @if (loading()) {
+          <div class="state admin-loading-state">
+            <span class="spinner"></span><span>Loading menu...</span>
+          </div>
+        } @else {
+          <div class="table-scroll">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Availability</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (item of filteredItems(); track item._id) {
+                  <tr>
+                    <td>
+                      <div class="item-cell">
+                        @if (item.image) {
+                          <img [src]="item.image" [alt]="item.name" />
+                        } @else {
+                          <span class="item-placeholder" aria-hidden="true">{{
+                            item.name.charAt(0)
+                          }}</span>
+                        }
+                        <div>
+                          <strong>{{ item.name }}</strong
+                          ><span>{{ item.description }}</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td>{{ item.category }}</td>
+                    <td>
+                      <strong>{{ formatCurrency(item.price) }}</strong>
+                    </td>
+                    <td>
+                      <button
+                        type="button"
+                        [class]="'status-badge ' + (item.available ? 'active' : 'inactive')"
+                        [disabled]="saving()"
+                        (click)="toggleAvailability(item)"
+                      >
+                        {{ item.available ? 'Available' : 'Unavailable' }}
+                      </button>
+                    </td>
+                    <td>
+                      <div class="row-actions">
+                        <button type="button" (click)="openItem(item)">Edit</button
+                        ><button
+                          class="danger"
+                          type="button"
+                          [disabled]="deletingId() !== null"
+                          (click)="deleteItem(item)"
+                        >
+                          {{ deletingId() === item._id ? 'Deleting...' : 'Delete' }}
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td class="empty" colspan="5">
+                      <div class="admin-empty-state">
+                        <span class="empty-icon" aria-hidden="true">☰</span>
+                        <strong>No menu items yet</strong>
+                        <span>Add your first item to start building the restaurant menu.</span>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </section>
+      <section class="panel admin-card categories-panel">
+        <div class="panel-header admin-card-header">
+          <div>
+            <h3>Categories</h3>
+            <p>Organize your menu</p>
+          </div>
+        </div>
+        <div class="category-list">
+          @for (category of categories(); track category._id) {
+            <article>
+              <div>
+                <strong>{{ category.name }}</strong
+                ><span>{{ category.description || 'No description' }}</span>
+              </div>
+              <span [class]="'status-badge ' + (category.active ? 'active' : 'inactive')">{{
+                category.active ? 'Active' : 'Inactive'
+              }}</span>
+              <div class="row-actions">
+                <button type="button" (click)="openCategory(category)">Edit</button
+                ><button
+                  class="danger"
+                  type="button"
+                  [disabled]="deletingId() !== null"
+                  (click)="deleteCategory(category)"
+                >
+                  Delete
+                </button>
+              </div>
+            </article>
+          } @empty {
+            <div class="admin-empty-state compact">
+              <span class="empty-icon" aria-hidden="true">#</span>
+              <strong>No categories yet</strong>
+              <span>Create a category to organize your menu.</span>
+            </div>
+          }
+        </div>
+      </section>
+    </div>
+  </main>
+</app-admin-layout>
+@if (formKind()) {
+  <div class="modal-backdrop" (click)="closeForm()">
+    <section class="admin-modal" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>
+          {{ editingId() ? 'Edit' : 'Add' }} {{ formKind() === 'item' ? 'Menu Item' : 'Category' }}
+        </h2>
+        <button class="close-button" type="button" aria-label="Close" (click)="closeForm()">
+          &times;
+        </button>
+      </div>
+      @if (formKind() === 'item') {
+        <form class="admin-form" [formGroup]="itemForm" (ngSubmit)="saveItem()">
+          @if (errorMessage()) {
+            <div class="message error">{{ errorMessage() }}</div>
+          }
+          <div class="form-grid">
+            <label>Name<input formControlName="name" /></label
+            ><label
+              >Price<input type="number" min="0" step="0.001" formControlName="price"
+            /></label>
+          </div>
+          <label>Description<textarea formControlName="description"></textarea></label>
+          <div class="form-grid">
+            <label
+              >Category<select formControlName="category">
+                <option value="" disabled>Select category</option>
+                @for (category of categories(); track category._id) {
+                  <option [value]="category.name">{{ category.name }}</option>
+                }
+              </select></label
+            ><label>Image URL<input type="url" formControlName="image" /></label>
+          </div>
+          <label class="checkbox"
+            ><input type="checkbox" formControlName="available" /> Available for ordering</label
+          >
+          <div class="modal-actions">
+            <button
+              class="secondary-button admin-btn admin-btn-secondary"
+              type="button"
+              (click)="closeForm()"
+            >
+              Cancel</button
+            ><button
+              class="primary-button admin-btn admin-btn-primary"
+              type="submit"
+              [disabled]="saving()"
+            >
+              {{ saving() ? 'Saving...' : 'Save Item' }}
+            </button>
+          </div>
+        </form>
+      } @else {
+        <form class="admin-form" [formGroup]="categoryForm" (ngSubmit)="saveCategory()">
+          @if (errorMessage()) {
+            <div class="message error">{{ errorMessage() }}</div>
+          }
+          <label>Name<input formControlName="name" /></label
+          ><label>Description<textarea formControlName="description"></textarea></label
+          ><label class="checkbox"
+            ><input type="checkbox" formControlName="active" /> Active category</label
+          >
+          <div class="modal-actions">
+            <button
+              class="secondary-button admin-btn admin-btn-secondary"
+              type="button"
+              (click)="closeForm()"
+            >
+              Cancel</button
+            ><button
+              class="primary-button admin-btn admin-btn-primary"
+              type="submit"
+              [disabled]="saving()"
+            >
+              {{ saving() ? 'Saving...' : 'Save Category' }}
+            </button>
+          </div>
+        </form>
+      }
+    </section>
+  </div>
+}

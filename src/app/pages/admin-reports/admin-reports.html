@@ -1,0 +1,171 @@
+<app-admin-layout eyebrow="Analytics" title="Reports"
+  ><main class="management-content admin-page">
+    <div class="page-heading admin-page-header">
+      <div>
+        <p>Restaurant performance</p>
+        <h2>Reports</h2>
+        <span>All metrics are aggregated from MongoDB orders and menu items.</span>
+      </div>
+      <div class="toolbar admin-toolbar report-filters">
+        <select class="admin-select" aria-label="Report date range" (change)="changeRange($event)">
+          <option value="1">Today</option>
+          <option value="7">Last 7 days</option>
+          <option value="30" selected>Last 30 days</option>
+          <option value="all">All time</option>
+          <option value="custom">Custom</option>
+        </select>
+        @if (range() === 'custom') {
+          <input
+            class="admin-select"
+            aria-label="From date"
+            type="date"
+            (change)="setFrom($event)"
+          /><input
+            class="admin-select"
+            aria-label="To date"
+            type="date"
+            (change)="setTo($event)"
+          /><button class="primary-button admin-btn admin-btn-primary" (click)="apply()">
+            Apply
+          </button>
+        }
+      </div>
+    </div>
+    @if (errorMessage()) {
+      <div class="message error">{{ errorMessage() }}</div>
+    }
+    @if (loading()) {
+      <div class="panel admin-card state admin-loading-state">
+        <span class="spinner"></span><span>Calculating reports...</span>
+      </div>
+    } @else if (report(); as data) {
+      <section class="stats-row admin-stat-grid">
+        <article class="metric admin-stat-card">
+          <span class="metric-icon green" aria-hidden="true">$</span>
+          <div class="metric-copy">
+            <span>Total revenue</span><strong>{{ money(data.summary.revenue) }}</strong>
+          </div>
+        </article>
+        <article class="metric admin-stat-card">
+          <span class="metric-icon blue" aria-hidden="true">≡</span>
+          <div class="metric-copy">
+            <span>Total orders</span><strong>{{ data.summary.totalOrders }}</strong>
+          </div>
+        </article>
+        <article class="metric admin-stat-card">
+          <span class="metric-icon amber" aria-hidden="true">✓</span>
+          <div class="metric-copy">
+            <span>Completed</span><strong>{{ data.summary.completedOrders }}</strong>
+          </div>
+        </article>
+        <article class="metric admin-stat-card">
+          <span class="metric-icon red" aria-hidden="true">↗</span>
+          <div class="metric-copy">
+            <span>Average order</span><strong>{{ money(data.summary.averageOrderValue) }}</strong>
+          </div>
+        </article>
+      </section>
+      <div class="report-grid">
+        <section class="panel admin-card report-panel">
+          <div class="panel-header admin-card-header">
+            <div>
+              <h3>Orders by status</h3>
+              <p>Current workflow distribution</p>
+            </div>
+          </div>
+          <div class="bars">
+            @for (row of data.statuses; track row.status) {
+              <div>
+                <span>{{ row.status }}</span
+                ><i><b [style.width]="width(row.count, maxStatus())"></b></i
+                ><strong>{{ row.count }}</strong>
+              </div>
+            } @empty {
+              <p class="report-empty">No order data for this period.</p>
+            }
+          </div>
+        </section>
+        <section class="panel admin-card report-panel">
+          <div class="panel-header admin-card-header">
+            <div>
+              <h3>Orders by day</h3>
+              <p>Daily volume</p>
+            </div>
+          </div>
+          <div class="bars">
+            @for (row of data.daily; track row.date) {
+              <div>
+                <span>{{ row.date }}</span
+                ><i><b [style.width]="width(row.orders, maxDaily())"></b></i
+                ><strong>{{ row.orders }}</strong>
+              </div>
+            } @empty {
+              <p class="report-empty">No daily data for this period.</p>
+            }
+          </div>
+        </section>
+        <section class="panel admin-card report-panel">
+          <div class="panel-header admin-card-header">
+            <div><h3>Most ordered items</h3></div>
+          </div>
+          <ol>
+            @for (item of topItems(); track item._id) {
+              <li>
+                <span>{{ item.name }}</span
+                ><strong>{{ item.quantity }} sold</strong><small>{{ money(item.sales) }}</small>
+              </li>
+            } @empty {
+              <li class="report-empty">No item data for this period.</li>
+            }
+          </ol>
+        </section>
+        <section class="panel admin-card report-panel">
+          <div class="panel-header admin-card-header">
+            <div><h3>Least ordered items</h3></div>
+          </div>
+          <ol>
+            @for (item of leastItems(); track item._id) {
+              <li>
+                <span>{{ item.name }}</span
+                ><strong>{{ item.quantity }} sold</strong><small>{{ money(item.sales) }}</small>
+              </li>
+            } @empty {
+              <li class="report-empty">No menu items to report.</li>
+            }
+          </ol>
+        </section>
+        <section class="panel admin-card report-panel">
+          <div class="panel-header admin-card-header">
+            <div><h3>Busiest tables</h3></div>
+          </div>
+          <ol>
+            @for (table of data.tables; track table.tableId) {
+              <li>
+                <span>{{ table.number ? 'Table ' + table.number : 'Deleted table' }}</span
+                ><strong>{{ table.orders }} orders</strong><small>{{ money(table.revenue) }}</small>
+              </li>
+            } @empty {
+              <li class="report-empty">No table activity for this period.</li>
+            }
+          </ol>
+        </section>
+        <section class="panel admin-card report-panel">
+          <div class="panel-header admin-card-header">
+            <div><h3>Category performance</h3></div>
+          </div>
+          <ol>
+            @for (category of data.categories; track category.category) {
+              <li>
+                <span>{{ category.category }}</span
+                ><strong>{{ category.quantity }} items</strong
+                ><small>{{ money(category.sales) }}</small>
+              </li>
+            } @empty {
+              <li class="report-empty">No category activity for this period.</li>
+            }
+          </ol>
+        </section>
+      </div>
+    }
+  </main></app-admin-layout
+>

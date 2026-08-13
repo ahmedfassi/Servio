@@ -1,0 +1,182 @@
+<app-admin-layout eyebrow="Management" title="Customers"
+  ><main class="management-content admin-page">
+    <div class="page-heading admin-page-header">
+      <div>
+        <p>Guest relationships</p>
+        <h2>Customers</h2>
+        <span>Customer totals are calculated from linked, paid MongoDB orders.</span>
+      </div>
+      <button class="primary-button admin-btn admin-btn-primary" (click)="open()">
+        Add Customer
+      </button>
+    </div>
+    @if (successMessage()) {
+      <div class="message success">{{ successMessage() }}</div>
+    }
+    @if (errorMessage()) {
+      <div class="message error">{{ errorMessage() }}</div>
+    }
+    <section class="stats-row admin-stat-grid compact-stats">
+      <article class="metric admin-stat-card">
+        <span class="metric-icon blue" aria-hidden="true">♙</span>
+        <div class="metric-copy">
+          <span>Customers</span><strong>{{ customers().length }}</strong>
+        </div>
+      </article>
+      <article class="metric admin-stat-card">
+        <span class="metric-icon green" aria-hidden="true">$</span>
+        <div class="metric-copy">
+          <span>Total paid spend</span><strong>{{ money(totalSpent()) }}</strong>
+        </div>
+      </article>
+    </section>
+    <section class="panel admin-card">
+      <div class="panel-header admin-card-header">
+        <div>
+          <h3>Customer directory</h3>
+          <p>Real customer records and linked order activity</p>
+        </div>
+        <div class="toolbar admin-toolbar">
+          <input
+            class="admin-search"
+            type="search"
+            placeholder="Search customers"
+            (input)="setSearch($event)"
+          /><button class="refresh-button admin-btn admin-btn-secondary" (click)="reload()">
+            Refresh
+          </button>
+        </div>
+      </div>
+      @if (loading()) {
+        <div class="state admin-loading-state">
+          <span class="spinner"></span><span>Loading customers...</span>
+        </div>
+      } @else {
+        <div class="table-scroll">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Customer</th>
+                <th>Contact</th>
+                <th>Orders</th>
+                <th>Paid spend</th>
+                <th>Last order</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (c of filtered(); track c._id) {
+                <tr>
+                  <td>
+                    <div class="customer-cell">
+                      <span class="customer-avatar" aria-hidden="true">{{ c.name.charAt(0) }}</span>
+                      <strong>{{ c.name }}</strong>
+                    </div>
+                  </td>
+                  <td>
+                    <span>{{ c.email || 'No email' }}</span
+                    ><small>{{ c.phone || 'No phone' }}</small>
+                  </td>
+                  <td>
+                    <span class="order-count">{{ c.orderCount }}</span>
+                  </td>
+                  <td>
+                    <strong>{{ money(c.totalSpent) }}</strong>
+                  </td>
+                  <td>{{ date(c.lastOrder) }}</td>
+                  <td>
+                    <div class="row-actions">
+                      <button (click)="view(c)">View</button><button (click)="open(c)">Edit</button
+                      ><button
+                        class="danger"
+                        [disabled]="deletingId() !== null"
+                        (click)="remove(c)"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td class="empty" colspan="6">
+                    <div class="admin-empty-state">
+                      <span class="empty-icon" aria-hidden="true">♙</span>
+                      <strong>No customers yet</strong>
+                      <span
+                        >Customers appear here when records are created or linked to orders.</span
+                      >
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+  </main></app-admin-layout
+>
+@if (formOpen()) {
+  <div class="modal-backdrop" (click)="close()">
+    <section class="admin-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ editingId() ? 'Edit' : 'Add' }} Customer</h2>
+        <button class="close-button" type="button" aria-label="Close" (click)="close()">
+          &times;
+        </button>
+      </div>
+      <form class="admin-form" [formGroup]="form" (ngSubmit)="save()">
+        <label>Name<input formControlName="name" /></label
+        ><label>Phone<input type="tel" formControlName="phone" /></label
+        ><label>Email<input type="email" formControlName="email" /></label>
+        <div class="modal-actions">
+          <button
+            class="secondary-button admin-btn admin-btn-secondary"
+            type="button"
+            (click)="close()"
+          >
+            Cancel</button
+          ><button
+            class="primary-button admin-btn admin-btn-primary"
+            type="submit"
+            [disabled]="saving()"
+          >
+            {{ saving() ? 'Saving...' : 'Save Customer' }}
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
+}
+@if (selected(); as detail) {
+  <div class="modal-backdrop" (click)="closeDetail()">
+    <section class="admin-modal wide" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div>
+          <h2>{{ detail.customer.name }}</h2>
+          <p>{{ detail.customer.email || detail.customer.phone || 'No contact details' }}</p>
+        </div>
+        <button class="close-button" type="button" aria-label="Close" (click)="closeDetail()">
+          &times;
+        </button>
+      </div>
+      <div class="history">
+        <h3>Order history</h3>
+        @for (order of detail.orders; track order._id) {
+          <article>
+            <strong>#{{ order._id.slice(-6).toUpperCase() }}</strong
+            ><span>{{ date(order.createdAt) }}</span
+            ><span class="status-badge {{ order.status }}">{{ order.status }}</span
+            ><strong>{{ money(order.totalAmount) }}</strong>
+          </article>
+        } @empty {
+          <div class="admin-empty-state compact">
+            <strong>No linked orders yet</strong>
+            <span>This customer's order history will appear here.</span>
+          </div>
+        }
+      </div>
+    </section>
+  </div>
+}

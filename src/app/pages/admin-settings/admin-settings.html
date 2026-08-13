@@ -1,0 +1,95 @@
+<app-admin-layout eyebrow="Administration" title="Settings"
+  ><main class="management-content admin-page">
+    <div class="page-heading admin-page-header">
+      <div>
+        <p>Configuration</p>
+        <h2>Settings</h2>
+        <span>Only persisted restaurant, profile, and security controls are shown.</span>
+      </div>
+    </div>
+    @if (successMessage()) {
+      <div class="message success">{{ successMessage() }}</div>
+    }
+    @if (errorMessage()) {
+      <div class="message error">{{ errorMessage() }}</div>
+    }
+    @if (loading()) {
+      <div class="panel admin-card state admin-loading-state">
+        <span class="spinner"></span><span>Loading settings...</span>
+      </div>
+    } @else {
+      <div class="settings-grid">
+        <section class="panel admin-card settings-card restaurant-card">
+          <div class="panel-header admin-card-header settings-card-header">
+            <span class="settings-section-icon restaurant" aria-hidden="true">⌂</span>
+            <div>
+              <h3>Restaurant Information</h3>
+              <p>Public business contact details</p>
+            </div>
+          </div>
+          <form class="admin-form" [formGroup]="restaurantForm" (ngSubmit)="saveRestaurant()">
+            <label>Business name<input formControlName="businessName" /></label
+            ><label>Phone<input type="tel" formControlName="phone" /></label
+            ><label>Email<input type="email" formControlName="email" /></label
+            ><label>Address<textarea formControlName="address"></textarea></label
+            ><button
+              class="primary-button admin-btn admin-btn-primary"
+              type="submit"
+              [disabled]="saving() !== null"
+            >
+              {{ saving() === 'restaurant' ? 'Saving...' : 'Save Restaurant' }}
+            </button>
+          </form>
+        </section>
+        <section class="panel admin-card settings-card profile-card">
+          <div class="panel-header admin-card-header settings-card-header">
+            <span class="settings-section-icon profile" aria-hidden="true">♙</span>
+            <div>
+              <h3>Admin Profile</h3>
+              <p>Your authenticated account identity</p>
+            </div>
+          </div>
+          <form class="admin-form" [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+            <label>Display name<input formControlName="name" /></label
+            ><label>Email<input type="email" formControlName="email" /></label
+            ><button
+              class="primary-button admin-btn admin-btn-primary"
+              type="submit"
+              [disabled]="saving() !== null"
+            >
+              {{ saving() === 'profile' ? 'Saving...' : 'Save Profile' }}
+            </button>
+          </form>
+        </section>
+        <section class="panel admin-card settings-card security-card">
+          <div class="panel-header admin-card-header settings-card-header">
+            <span class="settings-section-icon security" aria-hidden="true">◆</span>
+            <div>
+              <h3>Security</h3>
+              <p>Verified through the existing bcrypt authentication flow</p>
+            </div>
+          </div>
+          <form class="admin-form" [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+            <label
+              >Current password<input type="password" formControlName="currentPassword" /></label
+            ><label
+              >New password<input type="password" formControlName="newPassword" /><small
+                >Minimum 6 characters</small
+              ></label
+            ><label
+              >Confirm new password<input
+                type="password"
+                formControlName="confirmPassword" /></label
+            ><button
+              class="primary-button admin-btn admin-btn-primary"
+              type="submit"
+              [disabled]="saving() !== null"
+            >
+              {{ saving() === 'password' ? 'Changing...' : 'Change Password' }}
+            </button>
+          </form>
+        </section>
+      </div>
+    }
+  </main></app-admin-layout
+>

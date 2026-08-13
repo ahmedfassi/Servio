@@ -1,0 +1,123 @@
+:host {
+  display: block;
+}
+
+.login-page {
+  min-height: calc(100vh - 90px);
+  padding: 135px 24px 70px;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(255, 160, 74, 0.18), transparent 28%),
+    radial-gradient(circle at 85% 75%, rgba(78, 205, 196, 0.14), transparent 28%), var(--off-white);
+}
+
+.login-card {
+  width: min(440px, 100%);
+  padding: clamp(30px, 6vw, 48px);
+  border: 1px solid rgba(30, 42, 58, 0.1);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 28px 80px rgba(30, 42, 58, 0.13);
+}
+
+.login-brand {
+  display: inline-block;
+  margin-bottom: 34px;
+  color: var(--navy);
+  font-family: var(--logo-font);
+  font-size: 36px;
+  letter-spacing: -1.5px;
+  text-decoration: none;
+}
+
+.login-brand span {
+  color: var(--orange);
+}
+
+.login-card .eyebrow {
+  margin-bottom: 10px;
+}
+
+h1 {
+  margin: 0;
+  color: var(--navy);
+  font-family: var(--display-font);
+  font-size: clamp(38px, 8vw, 52px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.login-intro {
+  margin: 16px 0 28px;
+  color: var(--slate);
+  line-height: 1.55;
+}
+
+form {
+  display: grid;
+}
+
+label {
+  margin: 17px 0 7px;
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+input {
+  width: 100%;
+  min-height: 50px;
+  padding: 0 15px;
+  border: 1px solid #dfe3e8;
+  border-radius: 12px;
+  color: var(--navy);
+  background: #fff;
+  font: inherit;
+}
+
+input:focus {
+  border-color: var(--cyan);
+  outline: 3px solid rgba(78, 205, 196, 0.15);
+}
+
+.field-error,
+.login-error {
+  color: #a43f35;
+}
+
+.field-error {
+  margin-top: 6px;
+  font-size: 11px;
+}
+
+.login-error {
+  margin: 18px 0 0;
+  padding: 11px 13px;
+  border-radius: 10px;
+  background: #fff0ee;
+  font-size: 13px;
+}
+
+button {
+  min-height: 51px;
+  margin-top: 24px;
+  border: 0;
+  border-radius: 12px;
+  color: #fff;
+  background: var(--navy);
+  font-weight: 800;
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease;
+}
+
+button:hover:not(:disabled) {
+  background: #293c52;
+  transform: translateY(-1px);
+}
+
+button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}

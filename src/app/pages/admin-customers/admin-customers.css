@@ -1,0 +1,75 @@
+:host {
+  display: block;
+}
+.customer-cell {
+  min-width: 150px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.customer-avatar {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff0df;
+  color: #db6b00;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.order-count {
+  min-width: 30px;
+  display: inline-grid;
+  place-items: center;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: #f0f4f7;
+  color: #4d5965;
+  font-size: 12px;
+  font-weight: 700;
+}
+td > span,
+td > small {
+  display: block;
+}
+td > small {
+  margin-top: 4px;
+  color: #8d97a3;
+}
+.history {
+  padding: 8px 22px 24px;
+}
+.history h3 {
+  margin: 14px 0;
+  color: #202832;
+  font-size: 14px;
+}
+.history article {
+  margin-top: 8px;
+  padding: 13px 14px;
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1fr 1fr;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #edf0f2;
+  border-radius: 12px;
+  background: #fbfcfd;
+}
+.history article > strong:last-child {
+  text-align: right;
+}
+.modal-header p {
+  margin: 5px 0 0;
+  color: #8d97a3;
+  font-size: 12px;
+}
+@media (max-width: 580px) {
+  .history article {
+    grid-template-columns: 1fr 1fr;
+  }
+  .history article > strong:last-child {
+    text-align: left;
+  }
+}

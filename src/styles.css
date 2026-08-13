@@ -81,6 +81,30 @@ a {
   scroll-margin-top: 92px;
 }
 
+app-admin-dashboard .back-to-website {
+  min-height: 48px;
+  margin-top: auto;
+  padding: 0 13px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  color: #c5cdd8;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+app-admin-dashboard .back-to-website:hover {
+  color: var(--orange);
+}
+
+app-admin-dashboard .back-to-website svg {
+  width: 19px;
+  height: 19px;
+}
+
 /* Home enhancements */
 
 app-home .hero-glow {

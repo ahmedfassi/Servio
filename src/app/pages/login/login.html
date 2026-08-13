@@ -1,0 +1,42 @@
+<section class="login-page" aria-labelledby="login-title">
+  <div class="login-card">
+    <a class="login-brand" routerLink="/" aria-label="Serv.io home">Serv<span>.io</span></a>
+    <p class="eyebrow">Restaurant workspace</p>
+    <h1 id="login-title">Welcome back</h1>
+    <p class="login-intro">Sign in with your administrator account to open the dashboard.</p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="submit()" novalidate>
+      <label for="email">Email</label>
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        autocomplete="username"
+        placeholder="admin@example.com"
+      />
+      @if (loginForm.controls.email.touched && loginForm.controls.email.invalid) {
+        <small class="field-error">Enter a valid email address.</small>
+      }
+
+      <label for="password">Password</label>
+      <input
+        id="password"
+        type="password"
+        formControlName="password"
+        autocomplete="current-password"
+        placeholder="Your password"
+      />
+      @if (loginForm.controls.password.touched && loginForm.controls.password.invalid) {
+        <small class="field-error">Password is required.</small>
+      }
+
+      @if (errorMessage()) {
+        <p class="login-error" role="alert">{{ errorMessage() }}</p>
+      }
+
+      <button type="submit" [disabled]="submitting()">
+        {{ submitting() ? 'Signing in…' : 'Sign in' }}
+      </button>
+    </form>
+  </div>
+</section>

@@ -1,0 +1,103 @@
+:host {
+  display: block;
+}
+
+.order-items {
+  width: min(270px, 28vw);
+  min-width: 215px;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 7px;
+  list-style: none;
+}
+
+.order-items li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #596575;
+}
+
+.order-items li strong {
+  min-width: 22px;
+  color: #c86b27;
+}
+
+.order-items span {
+  margin-left: auto;
+  color: #8d97a3;
+  font-size: 10px;
+}
+
+.notes {
+  max-width: 150px;
+  margin-top: 5px;
+  display: block;
+  overflow: hidden;
+  color: #8d97a3;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.date {
+  min-width: 145px;
+  color: #8d97a3;
+  font-size: 11px;
+}
+
+.status-select {
+  min-width: 106px;
+  height: 31px;
+  padding: 0 29px 0 11px;
+  appearance: none;
+  border: 1px solid transparent;
+  border-radius: 100px;
+  background-repeat: no-repeat;
+  background-position: right 9px center;
+  background-size: 12px;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 780;
+  text-transform: capitalize;
+  outline: none;
+  cursor: pointer;
+}
+
+.status-select.pending {
+  color: #96701f;
+  background-color: #fbf3df;
+}
+
+.status-select.preparing {
+  color: #a95725;
+  background-color: #fff0e4;
+}
+
+.status-select.ready,
+.status-select.paid {
+  color: #367660;
+  background-color: #e8f5ee;
+}
+
+.status-select.served {
+  color: #54708f;
+  background-color: #ebf0f6;
+}
+
+.status-select.cancelled {
+  color: #a14d45;
+  background-color: #faecea;
+}
+
+.status-select:focus {
+  border-color: currentColor;
+  box-shadow: 0 0 0 3px rgba(84, 112, 143, 0.1);
+}
+
+@media (max-width: 760px) {
+  .order-items {
+    width: 230px;
+  }
+}

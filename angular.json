@@ -25,7 +25,9 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/app/pages/admin-shared.css",
+              "src/app/pages/admin-management.css"
             ],
             "server": "src/main.server.ts",
             "outputMode": "server",

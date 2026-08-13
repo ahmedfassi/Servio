@@ -1,0 +1,861 @@
+/* Shared management UI for Orders, Services, Customers, Staff, Reports, and Settings. */
+app-admin-layout {
+  --admin-navy: #182536;
+  --admin-text: #18212f;
+  --admin-muted: #7b8694;
+  --admin-border: #e5e8ec;
+  --admin-soft: #f7f8fa;
+  --admin-orange: #d9782f;
+  --admin-orange-dark: #c66724;
+}
+
+app-admin-layout .management-content,
+app-admin-layout .admin-page {
+  width: min(1450px, 100%);
+  margin: 0 auto;
+  padding: 34px clamp(24px, 3.2vw, 48px) 52px;
+}
+
+app-admin-layout .page-heading,
+app-admin-layout .admin-page-header {
+  min-height: 78px;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+app-admin-layout .page-heading > div:first-child,
+app-admin-layout .admin-page-header > div:first-child {
+  min-width: 0;
+}
+
+app-admin-layout .page-heading p,
+app-admin-layout .admin-page-header p {
+  margin: 0;
+  color: #a46635;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+app-admin-layout .page-heading h2,
+app-admin-layout .admin-page-header h2 {
+  margin: 5px 0 8px;
+  color: var(--admin-text);
+  font-size: clamp(27px, 3vw, 32px);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+app-admin-layout .page-heading > div:first-child > span,
+app-admin-layout .admin-page-header > div:first-child > span {
+  display: block;
+  color: var(--admin-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+app-admin-layout .toolbar,
+app-admin-layout .admin-toolbar,
+app-admin-layout .admin-page-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+app-admin-layout .primary-button,
+app-admin-layout .secondary-button,
+app-admin-layout .refresh-button,
+app-admin-layout .admin-btn {
+  min-height: 40px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 780;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+app-admin-layout .primary-button,
+app-admin-layout .admin-btn-primary {
+  min-height: 43px;
+  padding: 0 17px;
+  border-color: var(--admin-orange);
+  color: #fff;
+  background: var(--admin-orange);
+  box-shadow: 0 8px 18px rgba(217, 120, 47, 0.2);
+}
+
+app-admin-layout .primary-button:hover,
+app-admin-layout .admin-btn-primary:hover {
+  border-color: var(--admin-orange-dark);
+  background: var(--admin-orange-dark);
+  box-shadow: 0 10px 22px rgba(198, 103, 36, 0.24);
+  transform: translateY(-1px);
+}
+
+app-admin-layout .secondary-button,
+app-admin-layout .refresh-button,
+app-admin-layout .admin-btn-secondary {
+  border-color: #dfe4e9;
+  color: #526071;
+  background: #fff;
+}
+
+app-admin-layout .secondary-button:hover,
+app-admin-layout .refresh-button:hover,
+app-admin-layout .admin-btn-secondary:hover,
+app-admin-layout .row-actions button:hover {
+  border-color: #c8d0d9;
+  color: #283547;
+  background: #f8fafb;
+}
+
+app-admin-layout button svg,
+app-admin-layout .admin-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+app-admin-layout button:disabled {
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.55;
+  transform: none;
+}
+
+app-admin-layout .message {
+  min-height: 50px;
+  margin-bottom: 18px;
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+app-admin-layout .message.success {
+  border-color: #bcded0;
+  color: #367660;
+  background: #eef8f4;
+}
+
+app-admin-layout .message.error {
+  border-color: #ebc8c3;
+  color: #94453d;
+  background: #fff6f5;
+}
+
+app-admin-layout .stats-row,
+app-admin-layout .admin-stat-grid {
+  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+app-admin-layout .stats-row.compact-stats {
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+}
+
+app-admin-layout .stats-row.three-stats {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+app-admin-layout .metric,
+app-admin-layout .admin-stat-card {
+  min-height: 128px;
+  padding: 21px;
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  border: 1px solid var(--admin-border);
+  border-radius: 17px;
+  background: #fff;
+  box-shadow: 0 8px 25px rgba(30, 42, 58, 0.045);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+app-admin-layout .metric:hover,
+app-admin-layout .admin-stat-card:hover {
+  border-color: #d9dfe5;
+  box-shadow: 0 13px 32px rgba(30, 42, 58, 0.075);
+  transform: translateY(-2px);
+}
+
+app-admin-layout .metric-icon {
+  width: 43px;
+  height: 43px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  border-radius: 12px;
+  color: #c86b27;
+  background: #fff0e4;
+}
+
+app-admin-layout .metric .metric-icon,
+app-admin-layout .admin-stat-card .metric-icon {
+  color: #c86b27;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+app-admin-layout .metric-icon.green {
+  color: #39816c;
+  background: #e9f5f0;
+}
+
+app-admin-layout .metric-icon.blue {
+  color: #54759b;
+  background: #eaf0f7;
+}
+
+app-admin-layout .metric-icon.amber {
+  color: #a97b25;
+  background: #f8f1df;
+}
+
+app-admin-layout .metric-icon.red {
+  color: #a14d45;
+  background: #faecea;
+}
+
+app-admin-layout .metric-icon svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+app-admin-layout .metric-copy {
+  min-width: 0;
+  display: grid;
+}
+
+app-admin-layout .metric span,
+app-admin-layout .admin-stat-card span {
+  color: #727e8d;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+app-admin-layout .metric strong,
+app-admin-layout .admin-stat-card strong {
+  margin-top: 7px;
+  display: block;
+  overflow: hidden;
+  color: var(--admin-text);
+  font-size: clamp(22px, 2vw, 27px);
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+app-admin-layout .panel,
+app-admin-layout .admin-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--admin-border);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 8px 25px rgba(30, 42, 58, 0.04);
+}
+
+app-admin-layout .panel-header,
+app-admin-layout .admin-card-header {
+  min-height: 82px;
+  padding: 19px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border-bottom: 1px solid #edf0f2;
+}
+
+app-admin-layout .panel-header h3,
+app-admin-layout .admin-card-header h3 {
+  margin: 0 0 5px;
+  color: var(--admin-text);
+  font-size: 16px;
+  letter-spacing: -0.015em;
+}
+
+app-admin-layout .panel-header p,
+app-admin-layout .admin-card-header p {
+  margin: 0;
+  color: var(--admin-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+app-admin-layout .toolbar input,
+app-admin-layout .toolbar select,
+app-admin-layout .admin-search,
+app-admin-layout .admin-select {
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #dce1e6;
+  border-radius: 10px;
+  color: #344052;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(30, 42, 58, 0.025);
+  font: inherit;
+  font-size: 12px;
+  outline: none;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+app-admin-layout .toolbar input[type='search'],
+app-admin-layout .admin-search {
+  width: min(235px, 38vw);
+  padding-left: 36px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23838e9b' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 12px center;
+}
+
+app-admin-layout .toolbar select,
+app-admin-layout .admin-select {
+  min-width: 132px;
+  padding-right: 34px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236d7886' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='m7 10 5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 11px center;
+}
+
+app-admin-layout .toolbar input:focus,
+app-admin-layout .toolbar select:focus,
+app-admin-layout .admin-search:focus,
+app-admin-layout .admin-select:focus,
+.admin-modal input:focus,
+.admin-modal select:focus,
+.admin-modal textarea:focus,
+app-admin-layout .settings-card input:focus,
+app-admin-layout .settings-card textarea:focus {
+  border-color: var(--admin-orange);
+  box-shadow: 0 0 0 3px rgba(217, 120, 47, 0.12);
+}
+
+app-admin-layout .table-scroll {
+  overflow-x: auto;
+  scrollbar-color: #cbd2da transparent;
+  scrollbar-width: thin;
+}
+
+app-admin-layout table,
+app-admin-layout .admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+app-admin-layout th {
+  padding: 13px 20px;
+  color: #8d97a3;
+  background: #fafbfc;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.085em;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+app-admin-layout td {
+  min-height: 68px;
+  padding: 15px 20px;
+  border-top: 1px solid #f0f2f4;
+  color: #5d6877;
+  line-height: 1.45;
+  vertical-align: middle;
+}
+
+app-admin-layout tbody tr {
+  transition: background 0.16s ease;
+}
+
+app-admin-layout tbody tr:hover {
+  background: #fcfcfd;
+}
+
+app-admin-layout td strong {
+  color: #263244;
+}
+
+app-admin-layout .row-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 7px;
+  white-space: nowrap;
+}
+
+app-admin-layout .row-actions button {
+  min-height: 33px;
+  padding: 0 11px;
+  border: 1px solid #dfe4e9;
+  border-radius: 9px;
+  color: #526071;
+  background: #fff;
+  font-size: 11px;
+  font-weight: 750;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease;
+}
+
+app-admin-layout .row-actions .danger,
+app-admin-layout .admin-btn-danger {
+  border-color: #ecd0cc;
+  color: #a14d45;
+  background: #fff;
+}
+
+app-admin-layout .row-actions .danger:hover,
+app-admin-layout .admin-btn-danger:hover {
+  border-color: #e1aaa3;
+  color: #913c34;
+  background: #fff5f3;
+}
+
+app-admin-layout .status-badge,
+app-admin-layout .admin-badge {
+  min-height: 26px;
+  padding: 5px 9px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 780;
+  line-height: 1;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+app-admin-layout .status-badge::before,
+app-admin-layout .admin-badge::before {
+  width: 6px;
+  height: 6px;
+  flex: none;
+  border-radius: 50%;
+  background: currentColor;
+  content: '';
+}
+
+app-admin-layout :is(.status-badge, .admin-badge).pending,
+app-admin-layout :is(.status-badge, .admin-badge).reserved {
+  color: #a47520;
+  background: #fbf3df;
+}
+
+app-admin-layout :is(.status-badge, .admin-badge).preparing,
+app-admin-layout :is(.status-badge, .admin-badge).occupied {
+  color: #b15e27;
+  background: #fff0e4;
+}
+
+app-admin-layout :is(.status-badge, .admin-badge).ready,
+app-admin-layout :is(.status-badge, .admin-badge).available,
+app-admin-layout :is(.status-badge, .admin-badge).active,
+app-admin-layout :is(.status-badge, .admin-badge).paid {
+  color: #367660;
+  background: #e8f5ee;
+}
+
+app-admin-layout :is(.status-badge, .admin-badge).served,
+app-admin-layout :is(.status-badge, .admin-badge).staff {
+  color: #54708f;
+  background: #ebf0f6;
+}
+
+app-admin-layout :is(.status-badge, .admin-badge).admin {
+  color: #735ca1;
+  background: #f0ecf8;
+}
+
+app-admin-layout :is(.status-badge, .admin-badge).cancelled,
+app-admin-layout :is(.status-badge, .admin-badge).inactive {
+  color: #a14d45;
+  background: #faecea;
+}
+
+app-admin-layout .state,
+app-admin-layout .admin-loading-state {
+  min-height: 255px;
+  display: grid;
+  place-content: center;
+  gap: 11px;
+  color: var(--admin-muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+app-admin-layout .spinner {
+  width: 25px;
+  height: 25px;
+  margin: auto;
+  border: 2px solid #e1e5e9;
+  border-top-color: var(--admin-orange);
+  border-radius: 50%;
+  animation: admin-spin 0.8s linear infinite;
+}
+
+app-admin-layout td.empty {
+  padding: 0 !important;
+}
+
+app-admin-layout .admin-empty-state,
+app-admin-layout .empty-state-content {
+  min-height: 250px;
+  padding: 40px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #929ca8;
+  text-align: center;
+}
+
+app-admin-layout .admin-empty-state .empty-icon {
+  width: 52px;
+  height: 52px;
+  margin-bottom: 13px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  color: #8793a1;
+  background: #f0f3f5;
+}
+
+app-admin-layout .admin-empty-state svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+app-admin-layout .admin-empty-state strong {
+  color: #3e4a59;
+  font-size: 14px;
+}
+
+app-admin-layout .admin-empty-state span:last-child,
+app-admin-layout .admin-empty-state p {
+  max-width: 420px;
+  margin: 6px 0 0;
+  color: #8f99a5;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+app-admin-layout .admin-empty-state.compact {
+  min-height: 150px;
+  padding: 28px 18px;
+}
+
+.modal-backdrop {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  padding: 20px;
+  display: grid;
+  place-items: center;
+  overflow-y: auto;
+  background: rgba(18, 27, 39, 0.62);
+  backdrop-filter: blur(3px);
+}
+
+.admin-modal {
+  width: min(560px, 100%);
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 19px;
+  background: #fff;
+  box-shadow: 0 28px 70px rgba(18, 27, 39, 0.3);
+}
+
+.admin-modal.wide {
+  width: min(780px, 100%);
+}
+
+.admin-modal .modal-header {
+  min-height: 78px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  border-bottom: 1px solid #edf0f2;
+}
+
+.admin-modal h2 {
+  margin: 0;
+  color: #18212f;
+  font-size: 21px;
+  letter-spacing: -0.025em;
+}
+
+.admin-modal .close-button {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  border: 1px solid #e2e6ea;
+  border-radius: 9px;
+  color: #687484;
+  background: #fff;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.admin-modal .close-button:hover {
+  color: #a14d45;
+  background: #fff5f3;
+}
+
+.admin-modal form,
+app-admin-layout .admin-form {
+  padding: 22px 24px 24px;
+  display: grid;
+  gap: 17px;
+}
+
+.admin-modal label,
+app-admin-layout .admin-form-field,
+app-admin-layout .settings-card label {
+  display: grid;
+  gap: 7px;
+  color: #3b4757;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.admin-modal input,
+.admin-modal select,
+.admin-modal textarea,
+app-admin-layout .settings-card input,
+app-admin-layout .settings-card textarea {
+  width: 100%;
+  padding: 0 12px;
+  border: 1px solid #dce1e6;
+  border-radius: 10px;
+  color: #263244;
+  background: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  outline: none;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.admin-modal :is(input, select, textarea).ng-invalid.ng-touched,
+app-admin-layout .settings-card :is(input, textarea).ng-invalid.ng-touched {
+  border-color: #cf6b60;
+  background: #fffafa;
+}
+
+.admin-modal input,
+.admin-modal select,
+app-admin-layout .settings-card input {
+  height: 44px;
+}
+
+.admin-modal select {
+  padding-right: 34px;
+  appearance: none;
+}
+
+.admin-modal textarea,
+app-admin-layout .settings-card textarea {
+  min-height: 96px;
+  padding-top: 11px;
+  resize: vertical;
+}
+
+.admin-modal small,
+app-admin-layout .settings-card small {
+  color: #8d97a3;
+  font-size: 10px;
+  font-weight: 550;
+  line-height: 1.45;
+}
+
+.admin-modal .form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.admin-modal .checkbox,
+app-admin-layout .checkbox {
+  min-height: 46px;
+  padding: 10px 12px;
+  display: flex !important;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #e3e7eb;
+  border-radius: 10px;
+  background: #fafbfc;
+}
+
+.admin-modal .checkbox input,
+app-admin-layout .checkbox input {
+  width: 18px !important;
+  height: 18px !important;
+  margin: 0;
+  accent-color: var(--admin-orange);
+}
+
+.admin-modal .modal-actions {
+  margin-top: 4px;
+  padding-top: 17px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  border-top: 1px solid #edf0f2;
+}
+
+@keyframes admin-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 1100px) {
+  app-admin-layout .stats-row,
+  app-admin-layout .admin-stat-grid,
+  app-admin-layout .stats-row.three-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  app-admin-layout .page-heading,
+  app-admin-layout .admin-page-header {
+    min-height: 0;
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  app-admin-layout .page-heading > .toolbar,
+  app-admin-layout .admin-page-actions {
+    align-self: flex-start;
+  }
+
+  app-admin-layout .panel-header,
+  app-admin-layout .admin-card-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  app-admin-layout .panel-header .toolbar,
+  app-admin-layout .admin-card-header .admin-toolbar {
+    width: 100%;
+  }
+
+  app-admin-layout .toolbar input[type='search'],
+  app-admin-layout .admin-search {
+    width: min(100%, 280px);
+    flex: 1 1 180px;
+  }
+}
+
+@media (max-width: 580px) {
+  app-admin-layout .management-content,
+  app-admin-layout .admin-page {
+    padding: 25px 16px 38px;
+  }
+
+  app-admin-layout .stats-row,
+  app-admin-layout .stats-row.compact-stats,
+  app-admin-layout .stats-row.three-stats,
+  app-admin-layout .admin-stat-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  app-admin-layout .metric,
+  app-admin-layout .admin-stat-card {
+    min-height: 112px;
+    padding: 18px;
+  }
+
+  app-admin-layout .panel-header,
+  app-admin-layout .admin-card-header {
+    padding: 18px;
+  }
+
+  app-admin-layout th,
+  app-admin-layout td {
+    padding-right: 17px;
+    padding-left: 17px;
+  }
+
+  .modal-backdrop {
+    padding: 11px;
+  }
+
+  .admin-modal {
+    max-height: calc(100vh - 22px);
+  }
+
+  .admin-modal .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-modal .modal-header,
+  .admin-modal form {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  app-admin-layout .metric,
+  app-admin-layout .primary-button {
+    transition: none;
+  }
+}

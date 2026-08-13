@@ -1,0 +1,187 @@
+:where(app-admin-dashboard, app-admin-tables, app-admin-layout) .admin-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+}
+
+:where(app-admin-dashboard, app-admin-tables, app-admin-layout) .sidebar {
+  position: sticky;
+  z-index: 30;
+  top: 0;
+  height: 100vh;
+  padding: 27px 18px 20px;
+  display: flex;
+  flex-direction: column;
+  color: #b9c1cc;
+  background: #172333;
+  box-shadow: 8px 0 30px rgba(23, 35, 51, 0.08);
+}
+
+:where(app-admin-dashboard, app-admin-tables, app-admin-layout) .brand-row {
+  min-height: 46px;
+  padding: 0 11px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+:where(app-admin-dashboard, app-admin-tables, app-admin-layout) .brand {
+  color: #fff;
+  font-family: var(--logo-font);
+  font-size: 34px;
+  letter-spacing: -1.5px;
+  text-decoration: none;
+}
+
+:where(app-admin-dashboard, app-admin-tables, app-admin-layout) .brand span,
+:where(app-admin-dashboard, app-admin-tables, app-admin-layout) .nav-item.active svg {
+  color: var(--orange);
+}
+
+:where(app-admin-dashboard, app-admin-tables, app-admin-layout) .sidebar-close,
+:where(app-admin-dashboard, app-admin-tables, app-admin-layout) .menu-button {
+  display: none;
+}
+
+:where(app-admin-dashboard, app-admin-tables, app-admin-layout) .sidebar-close {
+  padding: 5px;
+  border: 0;
+  color: #fff;
+  background: transparent;
+}
+
+:where(app-admin-dashboard, app-admin-tables, app-admin-layout) .nav-label {
+  margin: 35px 12px 10px;
+  color: #758295;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+:where(app-admin-dashboard, app-admin-tables, app-admin-layout) .sidebar nav {
+  display: grid;
+  gap: 5px;
+}
+
+:where(app-admin-dashboard, app-admin-tables, app-admin-layout) .nav-item {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 13px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border: 0;
+  border-radius: 12px;
+  color: #aeb8c6;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 650;
+  text-align: left;
+  text-decoration: none;
+  transition:
+    color 0.18s ease,
+    background 0.18s ease;
+}
+
+:where(app-admin-dashboard, app-admin-tables, app-admin-layout) .nav-item:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.055);
+}
+
+:where(app-admin-dashboard, app-admin-tables, app-admin-layout) .nav-item.active {
+  color: #fff;
+  background: rgba(255, 160, 74, 0.14);
+}
+
+:where(app-admin-dashboard, app-admin-tables, app-admin-layout) .nav-item svg,
+:where(app-admin-dashboard, app-admin-tables, app-admin-layout) .back-to-website svg {
+  width: 19px;
+  height: 19px;
+}
+
+:where(app-admin-dashboard, app-admin-tables, app-admin-layout) .nav-item small {
+  margin-left: auto;
+  color: #6f7c8e;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+:where(app-admin-dashboard, app-admin-tables, app-admin-layout) .back-to-website {
+  min-height: 48px;
+  margin-top: auto;
+  padding: 0 13px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  color: #c5cdd8;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+:where(app-admin-dashboard, app-admin-tables, app-admin-layout) .back-to-website:hover {
+  color: var(--orange);
+}
+
+:where(app-admin-dashboard, app-admin-tables, app-admin-layout) .sidebar-backdrop {
+  display: none;
+}
+
+:where(app-admin-dashboard, app-admin-tables, app-admin-layout) .admin-workspace {
+  min-width: 0;
+}
+
+@media (max-width: 840px) {
+  :where(app-admin-dashboard, app-admin-tables, app-admin-layout) .admin-shell {
+    display: block;
+  }
+
+  :where(app-admin-dashboard, app-admin-tables, app-admin-layout) .sidebar {
+    position: fixed;
+    left: 0;
+    width: 250px;
+    transform: translateX(-105%);
+    transition: transform 0.22s ease;
+  }
+
+  :where(app-admin-dashboard, app-admin-tables, app-admin-layout) .sidebar-open .sidebar {
+    transform: translateX(0);
+  }
+
+  :where(app-admin-dashboard, app-admin-tables, app-admin-layout) .sidebar-close,
+  :where(app-admin-dashboard, app-admin-tables, app-admin-layout) .menu-button {
+    display: grid;
+    place-items: center;
+  }
+
+  :where(app-admin-dashboard, app-admin-tables, app-admin-layout) .sidebar-backdrop {
+    position: fixed;
+    z-index: 25;
+    inset: 0;
+    display: block;
+    visibility: hidden;
+    border: 0;
+    opacity: 0;
+    background: rgba(18, 27, 39, 0.45);
+    transition:
+      opacity 0.2s,
+      visibility 0.2s;
+  }
+
+  :where(app-admin-dashboard, app-admin-tables, app-admin-layout) .sidebar-open .sidebar-backdrop {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(app-admin-dashboard, app-admin-tables, app-admin-layout) .sidebar,
+  :where(app-admin-dashboard, app-admin-tables, app-admin-layout) .sidebar-backdrop {
+    transition: none;
+  }
+}

@@ -1,0 +1,127 @@
+:host {
+  display: block;
+}
+.report-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+.report-filters {
+  justify-content: flex-end;
+}
+.report-panel {
+  min-height: 260px;
+}
+.bars {
+  padding: 20px;
+  display: grid;
+  gap: 13px;
+}
+.bars > div {
+  display: grid;
+  grid-template-columns: minmax(90px, 0.45fr) 1fr 35px;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  text-transform: capitalize;
+}
+.bars i {
+  height: 9px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #edf0f2;
+}
+.bars b {
+  height: 100%;
+  display: block;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #e27627, #ffad61);
+  box-shadow: 0 2px 5px rgb(226 118 39 / 24%);
+}
+.bars strong {
+  text-align: right;
+}
+.report-panel ol {
+  margin: 0;
+  padding: 12px 22px 20px;
+  counter-reset: report-rank;
+  list-style: none;
+}
+.report-panel li {
+  min-height: 48px;
+  padding: 12px 0;
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 14px;
+  border-bottom: 1px solid #edf0f2;
+  font-size: 12px;
+}
+.report-panel li::before {
+  counter-increment: report-rank;
+  content: counter(report-rank);
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #fff1e4;
+  color: #d86d17;
+  font-size: 11px;
+  font-weight: 800;
+}
+.report-panel li > span {
+  min-width: 0;
+  overflow: hidden;
+  color: #303a45;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.report-panel li small {
+  color: #8d97a3;
+}
+.report-empty {
+  margin: 0;
+  color: #8d97a3;
+  font-size: 12px;
+  text-align: center;
+}
+.report-panel li.report-empty {
+  min-height: 130px;
+  display: grid;
+  grid-template-columns: 1fr;
+  place-items: center;
+  border: 0;
+}
+.report-panel li.report-empty::before {
+  display: none;
+}
+@media (max-width: 850px) {
+  .report-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 580px) {
+  .report-filters,
+  .report-filters .admin-select,
+  .report-filters .admin-btn {
+    width: 100%;
+  }
+  .bars {
+    padding: 16px;
+  }
+  .bars > div {
+    grid-template-columns: 78px minmax(70px, 1fr) 28px;
+    gap: 8px;
+  }
+  .report-panel ol {
+    padding-inline: 16px;
+  }
+  .report-panel li {
+    grid-template-columns: 28px minmax(0, 1fr) auto;
+  }
+  .report-panel li small {
+    grid-column: 2 / -1;
+  }
+}

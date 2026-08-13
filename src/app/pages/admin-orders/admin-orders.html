@@ -1,0 +1,173 @@
+<app-admin-layout eyebrow="Management" title="Orders">
+  <main class="management-content admin-page">
+    <div class="page-heading admin-page-header">
+      <div>
+        <p>Order workflow</p>
+        <h2>Orders</h2>
+        <span>Review live orders and move them through the real service workflow.</span>
+      </div>
+      <button
+        class="secondary-button admin-btn admin-btn-secondary"
+        type="button"
+        [disabled]="loading()"
+        (click)="reload()"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20 6v5h-5M4 18v-5h5m10.5-3A8 8 0 0 0 6 6L4 8m16 8-2 2a8 8 0 0 1-13.5-3" />
+        </svg>
+        Refresh
+      </button>
+    </div>
+    @if (successMessage()) {
+      <div class="message success" role="status">{{ successMessage() }}</div>
+    }
+    @if (errorMessage()) {
+      <div class="message error" role="alert">{{ errorMessage() }}</div>
+    }
+    <section class="stats-row admin-stat-grid" aria-label="Order totals">
+      <article class="metric admin-stat-card">
+        <span class="metric-icon"
+          ><svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 3h12l1 18-7-3-7 3L6 3Zm3 5h6M9 12h6" /></svg
+        ></span>
+        <div class="metric-copy">
+          <span>Total orders</span><strong>{{ orders().length }}</strong>
+        </div>
+      </article>
+      <article class="metric admin-stat-card">
+        <span class="metric-icon amber"
+          ><svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 7v5l3 2m6-2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg
+        ></span>
+        <div class="metric-copy">
+          <span>Pending</span><strong>{{ pendingCount() }}</strong>
+        </div>
+      </article>
+      <article class="metric admin-stat-card">
+        <span class="metric-icon green"
+          ><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6" /></svg
+        ></span>
+        <div class="metric-copy">
+          <span>Served or paid</span><strong>{{ completedCount() }}</strong>
+        </div>
+      </article>
+      <article class="metric admin-stat-card">
+        <span class="metric-icon blue"
+          ><svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2v20m5-16.5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg
+        ></span>
+        <div class="metric-copy">
+          <span>Paid revenue</span><strong>{{ formatCurrency(paidRevenue()) }}</strong>
+        </div>
+      </article>
+    </section>
+    <section class="panel admin-card">
+      <div class="panel-header admin-card-header">
+        <div>
+          <h3>All orders</h3>
+          <p>{{ filteredOrders().length }} shown</p>
+        </div>
+        <div class="toolbar admin-toolbar">
+          <input
+            class="admin-search"
+            type="search"
+            placeholder="Search ID, table, or item"
+            aria-label="Search orders"
+            (input)="setSearch($event)"
+          /><select class="admin-select" aria-label="Filter by status" (change)="setFilter($event)">
+            <option value="all">All statuses</option>
+            @for (status of statuses; track status) {
+              <option [value]="status">{{ status }}</option>
+            }
+          </select>
+        </div>
+      </div>
+      @if (loading()) {
+        <div class="state admin-loading-state" aria-live="polite">
+          <span class="spinner"></span><span>Loading orders...</span>
+        </div>
+      } @else {
+        <div class="table-scroll">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Order</th>
+                <th>Table</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Created</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (order of filteredOrders(); track order._id) {
+                <tr>
+                  <td>
+                    <strong>#{{ order._id.slice(-6).toUpperCase() }}</strong>
+                    @if (order.notes) {
+                      <small class="notes">{{ order.notes }}</small>
+                    }
+                  </td>
+                  <td>{{ tableLabel(order) }}</td>
+                  <td>
+                    <ul class="order-items">
+                      @for (item of order.items; track item.menuItem) {
+                        <li>
+                          <strong>{{ item.quantity }}×</strong> {{ item.name }}
+                          <span>{{ formatCurrency(item.price) }}</span>
+                        </li>
+                      }
+                    </ul>
+                  </td>
+                  <td>
+                    <strong>{{ formatCurrency(order.totalAmount) }}</strong>
+                  </td>
+                  <td class="date">{{ formatDate(order.createdAt) }}</td>
+                  <td>
+                    <select
+                      class="status-select"
+                      [class]="'status-select ' + order.status"
+                      [value]="order.status"
+                      [disabled]="changingId() === order._id"
+                      (change)="changeStatus(order, $event)"
+                    >
+                      @for (status of statuses; track status) {
+                        <option [value]="status">{{ status }}</option>
+                      }
+                    </select>
+                  </td>
+                  <td>
+                    <div class="row-actions">
+                      <button
+                        class="danger"
+                        type="button"
+                        [disabled]="deletingId() !== null"
+                        (click)="deleteOrder(order)"
+                      >
+                        {{ deletingId() === order._id ? 'Deleting...' : 'Delete' }}
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td class="empty" colspan="7">
+                    <div class="admin-empty-state">
+                      <span class="empty-icon"
+                        ><svg viewBox="0 0 24 24" aria-hidden="true">
+                          <path d="M6 3h12l1 18-7-3-7 3L6 3Zm3 6h6m-6 4h4" /></svg
+                      ></span>
+                      <strong>No orders found</strong>
+                      <span>No orders match the current search and status filters.</span>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+  </main>
+</app-admin-layout>

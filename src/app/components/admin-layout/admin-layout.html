@@ -1,0 +1,81 @@
+<div class="admin-shell" [class.sidebar-open]="sidebarOpen()">
+  <button
+    class="sidebar-backdrop"
+    type="button"
+    aria-label="Close navigation"
+    [attr.tabindex]="sidebarOpen() ? 0 : -1"
+    (click)="closeSidebar()"
+  ></button>
+  <aside class="sidebar" aria-label="Admin navigation">
+    <div class="brand-row">
+      <a class="brand" routerLink="/admin" (click)="closeSidebar()">Serv<span>.io</span></a>
+      <button
+        class="sidebar-close"
+        type="button"
+        aria-label="Close navigation"
+        (click)="closeSidebar()"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+      </button>
+    </div>
+    <p class="nav-label">Workspace</p>
+    <nav>
+      @for (item of navigation; track item.route) {
+        <a
+          class="nav-item"
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: item.route === '/admin' }"
+          (click)="closeSidebar()"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="item.iconPath" /></svg>
+          <span>{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+    <a class="back-to-website" routerLink="/" (click)="closeSidebar()">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 17-5-5 5-5m-5 5h14" /></svg>
+      <span>Back to Website</span>
+    </a>
+  </aside>
+  <div class="admin-workspace">
+    <header class="topbar">
+      <div class="header-title">
+        <button
+          class="menu-button"
+          type="button"
+          aria-label="Open navigation"
+          [attr.aria-expanded]="sidebarOpen()"
+          (click)="toggleSidebar()"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+        </button>
+        <div>
+          <p>{{ eyebrow() }}</p>
+          <h1>{{ title() }}</h1>
+        </div>
+      </div>
+      <div class="admin-actions">
+        <div class="profile">
+          <div class="avatar" aria-hidden="true">{{ userInitial() }}</div>
+          <div>
+            <strong>{{ userName() }}</strong
+            ><span>Administrator</span>
+          </div>
+        </div>
+        <button
+          class="logout-button"
+          type="button"
+          aria-label="Sign out"
+          title="Sign out"
+          (click)="logout()"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M10 17l5-5-5-5m5 5H3m10-9h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6" />
+          </svg>
+        </button>
+      </div>
+    </header>
+    <ng-content />
+  </div>
+</div>

@@ -1,5 +1,9 @@
-<app-navbar />
+@if (!isAdminRoute()) {
+  <app-navbar />
+}
 <main class="site-content">
   <router-outlet />
 </main>
-<app-footer />
+@if (!isAdminRoute()) {
+  <app-footer />
+}

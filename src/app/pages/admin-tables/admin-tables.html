@@ -1,0 +1,266 @@
+<div class="admin-shell" [class.sidebar-open]="sidebarOpen()">
+  <button
+    class="sidebar-backdrop"
+    type="button"
+    aria-label="Close navigation"
+    [attr.tabindex]="sidebarOpen() ? 0 : -1"
+    (click)="closeSidebar()"
+  ></button>
+
+  <aside class="sidebar" aria-label="Admin navigation">
+    <div class="brand-row">
+      <a class="brand" routerLink="/admin" (click)="closeSidebar()">Serv<span>.io</span></a>
+      <button
+        class="sidebar-close"
+        type="button"
+        aria-label="Close navigation"
+        (click)="closeSidebar()"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+      </button>
+    </div>
+
+    <p class="nav-label">Workspace</p>
+    <nav>
+      @for (item of sidebarItems; track item.label) {
+        <a
+          class="nav-item"
+          [class.active]="item.label === 'Tables'"
+          [routerLink]="item.route"
+          [attr.aria-current]="item.label === 'Tables' ? 'page' : null"
+          (click)="closeSidebar()"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="item.iconPath" /></svg
+          ><span>{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+
+    <a class="back-to-website" routerLink="/" (click)="closeSidebar()">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 17-5-5 5-5m-5 5h14" /></svg>
+      <span>Back to Website</span>
+    </a>
+  </aside>
+
+  <div class="admin-workspace">
+    <header class="topbar">
+      <div class="header-title">
+        <button
+          class="menu-button"
+          type="button"
+          aria-label="Open navigation"
+          [attr.aria-expanded]="sidebarOpen()"
+          (click)="toggleSidebar()"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+        </button>
+        <div>
+          <p>Management</p>
+          <h1>Tables</h1>
+        </div>
+      </div>
+
+      <div class="admin-actions">
+        <div class="profile">
+          <div class="avatar" aria-hidden="true">{{ userInitial() }}</div>
+          <div>
+            <strong>{{ userName() }}</strong>
+            <span>Administrator</span>
+          </div>
+        </div>
+        <button
+          class="logout-button"
+          type="button"
+          aria-label="Sign out"
+          title="Sign out"
+          (click)="logout()"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M10 17l5-5-5-5m5 5H3m10-9h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="tables-content">
+      <div class="page-heading">
+        <div>
+          <p>Dining room setup</p>
+          <h2>Tables</h2>
+          <span>Manage table numbers, seating capacity, and availability.</span>
+        </div>
+        <button class="primary-button" type="button" (click)="openCreateForm()">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+          Add Table
+        </button>
+      </div>
+
+      @if (successMessage()) {
+        <div class="message success-message" role="status">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6" /></svg>
+          <span>{{ successMessage() }}</span>
+        </div>
+      }
+
+      @if (errorMessage()) {
+        <div class="message error-message" role="alert">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 8v5m0 4h.01M12 3 2 21h20L12 3Z" />
+          </svg>
+          <span>{{ errorMessage() }}</span>
+          @if (!formOpen()) {
+            <button type="button" (click)="reload()">Try again</button>
+          }
+        </div>
+      }
+
+      <section class="tables-panel" aria-labelledby="tables-list-title">
+        <div class="panel-header">
+          <div>
+            <h3 id="tables-list-title">Restaurant tables</h3>
+            <p>{{ tables().length }} {{ tables().length === 1 ? 'table' : 'tables' }} configured</p>
+          </div>
+          <button class="refresh-button" type="button" [disabled]="loading()" (click)="reload()">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20 6v5h-5M4 18v-5h5m10.5-3A8 8 0 0 0 6 6L4 8m16 8-2 2a8 8 0 0 1-13.5-3" />
+            </svg>
+            Refresh
+          </button>
+        </div>
+
+        @if (loading()) {
+          <div class="loading-state" aria-live="polite">
+            <span class="loading-indicator" aria-hidden="true"></span>
+            <p>Loading tables...</p>
+          </div>
+        } @else {
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Table number</th>
+                  <th>Capacity</th>
+                  <th>Status</th>
+                  <th>Last updated</th>
+                  <th><span class="sr-only">Actions</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (table of tables(); track table._id) {
+                  <tr>
+                    <td>
+                      <strong>Table {{ table.number }}</strong>
+                    </td>
+                    <td>{{ table.capacity }} {{ table.capacity === 1 ? 'guest' : 'guests' }}</td>
+                    <td>
+                      <span [class]="'status-badge ' + table.status">
+                        <i aria-hidden="true"></i>{{ statusLabel(table.status) }}
+                      </span>
+                    </td>
+                    <td class="updated-at">{{ formatDate(table.updatedAt) }}</td>
+                    <td>
+                      <div class="row-actions">
+                        <button
+                          type="button"
+                          [disabled]="deletingId() === table._id"
+                          (click)="openEditForm(table)"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          class="delete-button"
+                          type="button"
+                          [disabled]="deletingId() !== null"
+                          (click)="deleteTable(table)"
+                        >
+                          {{ deletingId() === table._id ? 'Deleting...' : 'Delete' }}
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td class="empty-state" colspan="5">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 8h14v7H5V8Zm3 7v5m8-5v5" />
+                      </svg>
+                      <strong>No tables yet</strong>
+                      <span>Add your first restaurant table to get started.</span>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </section>
+    </main>
+  </div>
+</div>
+
+@if (formOpen()) {
+  <div class="modal-backdrop" role="presentation" (click)="closeForm()">
+    <section
+      class="table-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="table-form-title"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="modal-header">
+        <div>
+          <p>{{ isEditing() ? 'Update table details' : 'Create a new table' }}</p>
+          <h2 id="table-form-title">{{ formTitle() }}</h2>
+        </div>
+        <button type="button" aria-label="Close form" [disabled]="saving()" (click)="closeForm()">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+        </button>
+      </div>
+
+      <form [formGroup]="tableForm" (ngSubmit)="saveTable()">
+        @if (errorMessage()) {
+          <div class="form-error" role="alert">{{ errorMessage() }}</div>
+        }
+
+        <label>
+          <span>Table number</span>
+          <input type="number" step="1" formControlName="number" />
+          @if (formSubmitted() && tableForm.controls.number.invalid) {
+            <small>Table number is required.</small>
+          }
+        </label>
+
+        <label>
+          <span>Capacity</span>
+          <input type="number" min="1" step="1" formControlName="capacity" />
+          @if (formSubmitted() && tableForm.controls.capacity.invalid) {
+            <small>Capacity must be at least 1.</small>
+          }
+        </label>
+
+        <label>
+          <span>Status</span>
+          <select formControlName="status">
+            @for (status of statuses; track status) {
+              <option [value]="status">{{ statusLabel(status) }}</option>
+            }
+          </select>
+        </label>
+
+        <div class="modal-actions">
+          <button
+            class="secondary-button"
+            type="button"
+            [disabled]="saving()"
+            (click)="closeForm()"
+          >
+            Cancel
+          </button>
+          <button class="primary-button" type="submit" [disabled]="saving()">
+            {{ saving() ? 'Saving...' : isEditing() ? 'Save Changes' : 'Add Table' }}
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
+}
