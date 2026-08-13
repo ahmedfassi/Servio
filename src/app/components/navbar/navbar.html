@@ -1,13 +1,18 @@
 <header class="site-header" [class.scrolled]="scrolled()">
   <div class="navbar">
-    <a class="logo" href="#home" aria-label="Serv.io home" (click)="activateSection('home')">
+    <a
+      class="logo"
+      href="#home"
+      [attr.aria-label]="t().nav.homeAria"
+      (click)="activateSection('home')"
+    >
       Serv<span>.io</span>
     </a>
 
     <button
       class="menu-toggle"
       type="button"
-      aria-label="Toggle navigation menu"
+      [attr.aria-label]="t().nav.menuAria"
       [attr.aria-expanded]="menuOpen()"
       aria-controls="main-navigation"
       (click)="toggleMenu()"
@@ -16,36 +21,57 @@
     </button>
 
     <div class="nav-panel" id="main-navigation" [class.is-open]="menuOpen()">
-      <nav class="nav-links" aria-label="Main navigation">
+      <nav class="nav-links" [attr.aria-label]="t().nav.navigationAria">
         <a
           href="#home"
           [class.active]="activeSection() === 'home'"
           [attr.aria-current]="activeSection() === 'home' ? 'location' : null"
           (click)="activateSection('home')"
-          >Home</a
+          >{{ t().nav.home }}</a
         >
         <a
           href="#services"
           [class.active]="activeSection() === 'services'"
           [attr.aria-current]="activeSection() === 'services' ? 'location' : null"
           (click)="activateSection('services')"
-          >Services</a
+          >{{ t().nav.services }}</a
         >
         <a
           href="#about"
           [class.active]="activeSection() === 'about'"
           [attr.aria-current]="activeSection() === 'about' ? 'location' : null"
           (click)="activateSection('about')"
-          >About Us</a
+          >{{ t().nav.about }}</a
         >
         <a
           href="#policies"
           [class.active]="activeSection() === 'policies'"
           [attr.aria-current]="activeSection() === 'policies' ? 'location' : null"
           (click)="activateSection('policies')"
-          >Policies</a
+          >{{ t().nav.policies }}</a
         >
       </nav>
+      <div class="language-switcher" role="group" [attr.aria-label]="t().nav.languageAria">
+        <button
+          type="button"
+          [class.active]="languageService.currentLanguage() === 'en'"
+          [attr.aria-pressed]="languageService.currentLanguage() === 'en'"
+          [attr.aria-label]="t().nav.englishAria"
+          (click)="setLanguage('en')"
+        >
+          EN
+        </button>
+        <span aria-hidden="true">|</span>
+        <button
+          type="button"
+          [class.active]="languageService.currentLanguage() === 'fr'"
+          [attr.aria-pressed]="languageService.currentLanguage() === 'fr'"
+          [attr.aria-label]="t().nav.frenchAria"
+          (click)="setLanguage('fr')"
+        >
+          FR
+        </button>
+      </div>
     </div>
   </div>
 </header>

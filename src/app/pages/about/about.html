@@ -1,18 +1,19 @@
 <section class="about-hero" aria-labelledby="about-title">
   <div class="hero-copy">
-    <p class="eyebrow">Our story, still in motion</p>
-    <h1 id="about-title">Hospitality moves fast.<br /><span>We help it flow.</span></h1>
+    <p class="eyebrow">{{ t().about.heroEyebrow }}</p>
+    <h1 id="about-title">
+      {{ t().about.heroTitle }}<br /><span>{{ t().about.heroTitleAccent }}</span>
+    </h1>
   </div>
   <p class="hero-intro">
-    Serv.io began with a simple belief: restaurant technology should disappear into the rhythm of
-    great service—not interrupt it. We are building the operating layer hospitality deserves.
+    {{ t().about.heroIntro }}
   </p>
 </section>
 
 <section class="journey-section" aria-labelledby="journey-title">
   <div class="section-heading">
-    <p class="eyebrow">From friction to flow</p>
-    <h2 id="journey-title">The Serv.io journey</h2>
+    <p class="eyebrow">{{ t().about.journeyEyebrow }}</p>
+    <h2 id="journey-title">{{ t().about.journeyTitle }}</h2>
   </div>
 
   <div class="journey">
@@ -20,62 +21,54 @@
 
     <article class="journey-step problem">
       <div class="step-copy">
-        <span class="step-number">01 / Problem</span>
-        <h3>Too many tools.<br />Not enough clarity.</h3>
-        <p>
-          Menus, tables, teams, orders and payments lived in separate systems. Staff spent their
-          energy bridging gaps instead of caring for guests.
-        </p>
+        <span class="step-number">{{ t().about.journey[0].label }}</span>
+        <h3>{{ t().about.journey[0].title }}<br />{{ t().about.journey[0].titleSecond }}</h3>
+        <p>{{ t().about.journey[0].description }}</p>
       </div>
       <div class="step-visual visual-problem" aria-hidden="true">
-        <span>Orders</span><span>Tables</span><span>Payments</span><span>Staff</span>
+        @for (word of t().about.journey[0].visualWords; track word) {
+          <span>{{ word }}</span>
+        }
       </div>
       <span class="journey-dot" aria-hidden="true"></span>
     </article>
 
     <article class="journey-step idea">
       <div class="step-copy">
-        <span class="step-number">02 / Idea</span>
-        <h3>What if it all<br />spoke one language?</h3>
-        <p>
-          We imagined one intuitive workspace shaped around how hospitality actually moves—from a
-          guest’s first scan to the team’s final close.
-        </p>
+        <span class="step-number">{{ t().about.journey[1].label }}</span>
+        <h3>{{ t().about.journey[1].title }}<br />{{ t().about.journey[1].titleSecond }}</h3>
+        <p>{{ t().about.journey[1].description }}</p>
       </div>
       <div class="step-visual visual-idea" aria-hidden="true">
         <div class="idea-orbit"></div>
-        <strong>One</strong><small>connected rhythm</small>
+        <strong>{{ t().about.journey[1].visualTitle }}</strong
+        ><small>{{ t().about.journey[1].visualCaption }}</small>
       </div>
       <span class="journey-dot" aria-hidden="true"></span>
     </article>
 
     <article class="journey-step solution">
       <div class="step-copy">
-        <span class="step-number">03 / Solution</span>
-        <h3>A calmer way to<br />run every service.</h3>
-        <p>
-          Serv.io connects the floor, kitchen, staff and guest experience in real time, turning
-          operational noise into useful, timely action.
-        </p>
+        <span class="step-number">{{ t().about.journey[2].label }}</span>
+        <h3>{{ t().about.journey[2].title }}<br />{{ t().about.journey[2].titleSecond }}</h3>
+        <p>{{ t().about.journey[2].description }}</p>
       </div>
       <div class="step-visual visual-solution" aria-hidden="true">
         <div class="mini-dashboard"><i></i><i></i><i></i><span></span></div>
-        <b>Live & connected</b>
+        <b>{{ t().about.journey[2].visualTitle }}</b>
       </div>
       <span class="journey-dot" aria-hidden="true"></span>
     </article>
 
     <article class="journey-step future">
       <div class="step-copy">
-        <span class="step-number">04 / Future</span>
-        <h3>Intelligence that feels<br />instinctive.</h3>
-        <p>
-          We are moving toward a future where every restaurant can anticipate demand, empower its
-          people and make better decisions without losing its human touch.
-        </p>
+        <span class="step-number">{{ t().about.journey[3].label }}</span>
+        <h3>{{ t().about.journey[3].title }}<br />{{ t().about.journey[3].titleSecond }}</h3>
+        <p>{{ t().about.journey[3].description }}</p>
       </div>
       <div class="step-visual visual-future" aria-hidden="true">
-        <span class="future-ring"></span><strong>Next</strong><small>is already serving</small>
+        <span class="future-ring"></span><strong>{{ t().about.journey[3].visualTitle }}</strong
+        ><small>{{ t().about.journey[3].visualCaption }}</small>
       </div>
       <span class="journey-dot" aria-hidden="true"></span>
     </article>
@@ -84,47 +77,51 @@
 
 <section class="principles" aria-labelledby="principles-title">
   <div class="principles-intro">
-    <p class="eyebrow">Our north star</p>
-    <h2 id="principles-title">Built around people.<br />Measured by impact.</h2>
+    <p class="eyebrow">{{ t().about.principlesEyebrow }}</p>
+    <h2 id="principles-title">
+      {{ t().about.principlesTitle }}<br />{{ t().about.principlesTitleSecond }}
+    </h2>
   </div>
   <div class="principle-grid">
     <article class="mission">
       <span>01</span>
-      <h3>Mission</h3>
-      <p>Give every hospitality team a simpler, smarter way to deliver remarkable service.</p>
+      <h3>{{ t().about.principles[0].title }}</h3>
+      <p>{{ t().about.principles[0].description }}</p>
     </article>
     <article class="vision">
       <span>02</span>
-      <h3>Vision</h3>
-      <p>A world where technology strengthens the human moments that make hospitality matter.</p>
+      <h3>{{ t().about.principles[1].title }}</h3>
+      <p>{{ t().about.principles[1].description }}</p>
     </article>
     <article class="values">
       <span>03</span>
-      <h3>Values</h3>
-      <p>Clarity over complexity. Progress with purpose. Hospitality in every interaction.</p>
+      <h3>{{ t().about.principles[2].title }}</h3>
+      <p>{{ t().about.principles[2].description }}</p>
     </article>
   </div>
 </section>
 
 <section class="values-constellation" aria-labelledby="values-title">
   <div class="constellation-heading">
-    <p class="eyebrow">Values in alignment</p>
-    <h2 id="values-title">Five points.<br /><span>One shared direction.</span></h2>
-    <p>Choose a value to explore the principles behind every Serv.io decision.</p>
+    <p class="eyebrow">{{ t().about.valuesEyebrow }}</p>
+    <h2 id="values-title">
+      {{ t().about.valuesTitle }}<br /><span>{{ t().about.valuesTitleAccent }}</span>
+    </h2>
+    <p>{{ t().about.valuesIntro }}</p>
   </div>
 
-  <div class="constellation" aria-label="Serv.io values constellation">
+  <div class="constellation" [attr.aria-label]="t().about.valuesAria">
     <div class="constellation-lines" aria-hidden="true"></div>
     <div class="constellation-core" aria-hidden="true"><span>Serv</span><strong>.io</strong></div>
-    @for (value of valueNodes; track value.name) {
+    @for (value of valueNodes(); track value.position) {
       <button
         type="button"
         [class]="'value-node ' + value.position"
-        [class.active]="activeValue() === value.name"
-        [attr.aria-pressed]="activeValue() === value.name"
-        (click)="selectValue(value.name)"
-        (focus)="selectValue(value.name)"
-        (mouseenter)="selectValue(value.name)"
+        [class.active]="activeValue() === value.position"
+        [attr.aria-pressed]="activeValue() === value.position"
+        (click)="selectValue(value.position)"
+        (focus)="selectValue(value.position)"
+        (mouseenter)="selectValue(value.position)"
       >
         <span>{{ value.symbol }}</span
         ><strong>{{ value.name }}</strong
@@ -137,11 +134,11 @@
 <section class="demo-section" id="demo" aria-labelledby="demo-title">
   <span id="contact"></span>
   <div>
-    <p class="eyebrow">Let’s shape what comes next</p>
-    <h2 id="demo-title">Your best service<br />starts here.</h2>
+    <p class="eyebrow">{{ t().about.demoEyebrow }}</p>
+    <h2 id="demo-title">{{ t().about.demoTitle }}<br />{{ t().about.demoTitleSecond }}</h2>
   </div>
   <div class="demo-action">
-    <p>See how Serv.io can fit the pace, personality and ambition of your venue.</p>
-    <a href="#services">Explore the platform <span aria-hidden="true">→</span></a>
+    <p>{{ t().about.demoDescription }}</p>
+    <a href="#services">{{ t().about.demoAction }} <span aria-hidden="true">→</span></a>
   </div>
 </section>

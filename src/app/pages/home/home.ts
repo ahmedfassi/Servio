@@ -10,14 +10,29 @@ import {
 import { About } from '../about/about';
 import { Policies } from '../policies/policies';
 import { Services } from '../services/services';
+import { LanguageService } from '../../core/i18n/language.service';
 
-type TableStatus = 'Available' | 'Occupied' | 'Preparing' | 'Reserved' | 'Payment requested';
+type TableStatus = 'available' | 'occupied' | 'preparing' | 'reserved' | 'paymentRequested';
+type OrderStatus =
+  | 'readyForGuests'
+  | 'mainCoursesServed'
+  | 'kitchenPlating'
+  | 'arrivalAt'
+  | 'drinksDelivered'
+  | 'billSent'
+  | 'resetComplete'
+  | 'orderAccepted'
+  | 'orderServed'
+  | 'readyToSettle'
+  | 'tableReset'
+  | 'orderDelivered'
+  | 'guestRequestedBill';
 
 interface FloorTable {
   readonly number: number;
   readonly guests: number;
   readonly status: TableStatus;
-  readonly orderStatus: string;
+  readonly orderStatus: OrderStatus;
   readonly amount: number;
   readonly elapsed: string;
   readonly position: string;
@@ -35,7 +50,8 @@ export class Home {
   private statsFrame = 0;
   private floorTick = 0;
 
-  protected readonly rotatingMessages = ['Manage faster', 'Serve smarter', 'Grow effortlessly'];
+  protected readonly t = inject(LanguageService).translations;
+  protected readonly rotatingMessages = computed(() => this.t().home.hero.rotatingMessages);
   protected readonly messageIndex = signal(0);
   protected readonly statsAnimated = signal(false);
   protected readonly statValues = signal([0, 0, 0, 0]);
@@ -45,8 +61,8 @@ export class Home {
     {
       number: 1,
       guests: 0,
-      status: 'Available',
-      orderStatus: 'Ready for guests',
+      status: 'available',
+      orderStatus: 'readyForGuests',
       amount: 0,
       elapsed: '—',
       position: 'table-a',
@@ -54,8 +70,8 @@ export class Home {
     {
       number: 2,
       guests: 3,
-      status: 'Occupied',
-      orderStatus: 'Main courses served',
+      status: 'occupied',
+      orderStatus: 'mainCoursesServed',
       amount: 86.5,
       elapsed: '31m',
       position: 'table-b',
@@ -63,8 +79,8 @@ export class Home {
     {
       number: 3,
       guests: 2,
-      status: 'Preparing',
-      orderStatus: 'Kitchen is plating',
+      status: 'preparing',
+      orderStatus: 'kitchenPlating',
       amount: 48,
       elapsed: '12m',
       position: 'table-c',
@@ -72,8 +88,8 @@ export class Home {
     {
       number: 4,
       guests: 4,
-      status: 'Reserved',
-      orderStatus: 'Arrival at 20:00',
+      status: 'reserved',
+      orderStatus: 'arrivalAt',
       amount: 0,
       elapsed: '18m',
       position: 'table-d',
@@ -81,8 +97,8 @@ export class Home {
     {
       number: 5,
       guests: 2,
-      status: 'Occupied',
-      orderStatus: 'Drinks delivered',
+      status: 'occupied',
+      orderStatus: 'drinksDelivered',
       amount: 34.75,
       elapsed: '19m',
       position: 'table-e',
@@ -90,8 +106,8 @@ export class Home {
     {
       number: 6,
       guests: 5,
-      status: 'Payment requested',
-      orderStatus: 'Bill sent to table',
+      status: 'paymentRequested',
+      orderStatus: 'billSent',
       amount: 124.2,
       elapsed: '54m',
       position: 'table-f',
@@ -99,8 +115,8 @@ export class Home {
     {
       number: 7,
       guests: 0,
-      status: 'Available',
-      orderStatus: 'Reset complete',
+      status: 'available',
+      orderStatus: 'resetComplete',
       amount: 0,
       elapsed: '—',
       position: 'table-g',
@@ -108,8 +124,8 @@ export class Home {
     {
       number: 8,
       guests: 2,
-      status: 'Preparing',
-      orderStatus: 'Order accepted',
+      status: 'preparing',
+      orderStatus: 'orderAccepted',
       amount: 57.4,
       elapsed: '8m',
       position: 'table-h',
@@ -146,7 +162,7 @@ export class Home {
   }
 
   protected statusClass(status: TableStatus): string {
-    return status.toLowerCase().replaceAll(' ', '-');
+    return status === 'paymentRequested' ? 'payment-requested' : status;
   }
 
   protected statValue(index: number): string {
@@ -168,7 +184,7 @@ export class Home {
 
     if (!reducedMotion) {
       const messageTimer = window.setInterval(
-        () => this.messageIndex.update((index) => (index + 1) % this.rotatingMessages.length),
+        () => this.messageIndex.update((index) => (index + 1) % this.rotatingMessages().length),
         3200,
       );
       this.destroyRef.onDestroy(() => window.clearInterval(messageTimer));
@@ -225,22 +241,22 @@ export class Home {
 
   private advanceFloorSample(): void {
     const tableThreeStates: readonly Partial<FloorTable>[] = [
-      { status: 'Occupied', orderStatus: 'Order served', elapsed: '18m' },
-      { status: 'Payment requested', orderStatus: 'Ready to settle', elapsed: '26m' },
-      { status: 'Available', guests: 0, orderStatus: 'Table reset', amount: 0, elapsed: '—' },
+      { status: 'occupied', orderStatus: 'orderServed', elapsed: '18m' },
+      { status: 'paymentRequested', orderStatus: 'readyToSettle', elapsed: '26m' },
+      { status: 'available', guests: 0, orderStatus: 'tableReset', amount: 0, elapsed: '—' },
       {
-        status: 'Preparing',
+        status: 'preparing',
         guests: 2,
-        orderStatus: 'Kitchen is plating',
+        orderStatus: 'kitchenPlating',
         amount: 48,
         elapsed: '12m',
       },
     ];
     const tableEightStates: readonly Partial<FloorTable>[] = [
-      { status: 'Preparing', orderStatus: 'Kitchen is plating', elapsed: '13m' },
-      { status: 'Occupied', orderStatus: 'Order delivered', elapsed: '20m' },
-      { status: 'Payment requested', orderStatus: 'Guest requested bill', elapsed: '33m' },
-      { status: 'Preparing', orderStatus: 'Order accepted', elapsed: '8m' },
+      { status: 'preparing', orderStatus: 'kitchenPlating', elapsed: '13m' },
+      { status: 'occupied', orderStatus: 'orderDelivered', elapsed: '20m' },
+      { status: 'paymentRequested', orderStatus: 'guestRequestedBill', elapsed: '33m' },
+      { status: 'preparing', orderStatus: 'orderAccepted', elapsed: '8m' },
     ];
     const nextIndex = this.floorTick % tableThreeStates.length;
     this.tables.update((tables) =>

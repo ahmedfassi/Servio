@@ -1,4 +1,5 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
+import { LanguageService } from '../../core/i18n/language.service';
 
 interface Service {
   readonly name: string;
@@ -14,67 +15,23 @@ interface Service {
   styleUrl: './services.css',
 })
 export class Services {
+  protected readonly t = inject(LanguageService).translations;
   protected readonly activeService = signal<string | null>(null);
-  protected readonly services: readonly Service[] = [
-    {
-      name: 'Digital menu',
-      kicker: 'Always current',
-      description: 'Update items, prices and availability instantly—without reprinting a thing.',
-      icon: '≡',
-      position: 'north',
-    },
-    {
-      name: 'QR ordering',
-      kicker: 'Scan to serve',
-      description: 'Let guests browse and order from their own device with a frictionless flow.',
-      icon: '⌗',
-      position: 'north-east',
-    },
-    {
-      name: 'Staff roles',
-      kicker: 'Clear ownership',
-      description: 'Give every team member the right tools and permissions for their shift.',
-      icon: '◎',
-      position: 'east',
-    },
-    {
-      name: 'Real-time tracking',
-      kicker: 'See every move',
-      description: 'Follow orders from table to kitchen to checkout as the service unfolds.',
-      icon: '↗',
-      position: 'south-east',
-    },
-    {
-      name: 'Electronic payment',
-      kicker: 'Secure by design',
-      description: 'Accept modern payment methods through a clear, guest-friendly experience.',
-      icon: '◇',
-      position: 'south',
-    },
-    {
-      name: 'Fast checkout',
-      kicker: 'Finish beautifully',
-      description: 'Split, settle and close tables in seconds when guests are ready to leave.',
-      icon: '→',
-      position: 'south-west',
-    },
-    {
-      name: 'Table management',
-      kicker: 'Own the floor',
-      description: 'Coordinate occupancy, reservations and service status from one live view.',
-      icon: '▦',
-      position: 'west',
-    },
-    {
-      name: 'Smart analytics',
-      kicker: 'Know what works',
-      description: 'Turn daily performance into practical insights for sharper decisions.',
-      icon: '⌁',
-      position: 'north-west',
-    },
-  ];
+  private readonly serviceLayout = [
+    { icon: '≡', position: 'north' },
+    { icon: '⌗', position: 'north-east' },
+    { icon: '◎', position: 'east' },
+    { icon: '↗', position: 'south-east' },
+    { icon: '◇', position: 'south' },
+    { icon: '→', position: 'south-west' },
+    { icon: '▦', position: 'west' },
+    { icon: '⌁', position: 'north-west' },
+  ] as const;
+  protected readonly services = computed<readonly Service[]>(() =>
+    this.serviceLayout.map((layout, index) => ({ ...layout, ...this.t().services.items[index] })),
+  );
 
-  protected toggleService(name: string): void {
-    this.activeService.update((active) => (active === name ? null : name));
+  protected toggleService(id: string): void {
+    this.activeService.update((active) => (active === id ? null : id));
   }
 }

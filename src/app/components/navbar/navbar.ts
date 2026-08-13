@@ -1,4 +1,6 @@
-import { afterNextRender, Component, HostListener, signal } from '@angular/core';
+import { afterNextRender, Component, HostListener, inject, signal } from '@angular/core';
+import { Language } from '../../core/i18n/translations';
+import { LanguageService } from '../../core/i18n/language.service';
 
 @Component({
   selector: 'app-navbar',
@@ -7,6 +9,9 @@ import { afterNextRender, Component, HostListener, signal } from '@angular/core'
 })
 export class Navbar {
   private readonly sectionIds = ['home', 'services', 'about', 'policies'] as const;
+
+  protected readonly languageService = inject(LanguageService);
+  protected readonly t = this.languageService.translations;
 
   protected readonly menuOpen = signal(false);
   protected readonly scrolled = signal(false);
@@ -43,5 +48,9 @@ export class Navbar {
 
   protected closeMenu(): void {
     this.menuOpen.set(false);
+  }
+
+  protected setLanguage(language: Language): void {
+    this.languageService.setLanguage(language);
   }
 }

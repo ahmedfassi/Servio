@@ -1,4 +1,13 @@
-import { afterNextRender, Component, DestroyRef, ElementRef, inject, signal } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  computed,
+  DestroyRef,
+  ElementRef,
+  inject,
+  signal,
+} from '@angular/core';
+import { LanguageService } from '../../core/i18n/language.service';
 
 interface ValueNode {
   readonly name: string;
@@ -16,46 +25,25 @@ export class About {
   private readonly destroyRef = inject(DestroyRef);
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
-  protected readonly activeValue = signal('Hospitality');
-  protected readonly valueNodes: readonly ValueNode[] = [
-    {
-      name: 'Simplicity',
-      description: 'Complex operations, made instinctive.',
-      symbol: '01',
-      position: 'value-north',
-    },
-    {
-      name: 'Speed',
-      description: 'Every tap respects the pace of service.',
-      symbol: '02',
-      position: 'value-east',
-    },
-    {
-      name: 'Reliability',
-      description: 'Steady technology for the busiest hours.',
-      symbol: '03',
-      position: 'value-south-east',
-    },
-    {
-      name: 'Insight',
-      description: 'Clear signals that lead to better decisions.',
-      symbol: '04',
-      position: 'value-south-west',
-    },
-    {
-      name: 'Hospitality',
-      description: 'Technology that keeps people at the center.',
-      symbol: '05',
-      position: 'value-west',
-    },
-  ];
+  protected readonly t = inject(LanguageService).translations;
+  protected readonly activeValue = signal('value-west');
+  private readonly valueLayout = [
+    { symbol: '01', position: 'value-north' },
+    { symbol: '02', position: 'value-east' },
+    { symbol: '03', position: 'value-south-east' },
+    { symbol: '04', position: 'value-south-west' },
+    { symbol: '05', position: 'value-west' },
+  ] as const;
+  protected readonly valueNodes = computed<readonly ValueNode[]>(() =>
+    this.valueLayout.map((layout, index) => ({ ...layout, ...this.t().about.values[index] })),
+  );
 
   constructor() {
     afterNextRender(() => this.setupJourneyReveal());
   }
 
-  protected selectValue(name: string): void {
-    this.activeValue.set(name);
+  protected selectValue(id: string): void {
+    this.activeValue.set(id);
   }
 
   private setupJourneyReveal(): void {

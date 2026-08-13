@@ -1,7 +1,7 @@
 <div
   class="reading-progress"
   role="progressbar"
-  aria-label="Reading progress"
+  [attr.aria-label]="t().policies.readingProgressAria"
   aria-valuemin="0"
   aria-valuemax="100"
   [attr.aria-valuenow]="readingProgress().toFixed(0)"
@@ -11,21 +11,23 @@
 
 <section class="policies-hero" aria-labelledby="policies-title">
   <div>
-    <p class="eyebrow">Clear by principle</p>
-    <h1 id="policies-title">Policies without<br /><span>the small print feeling.</span></h1>
+    <p class="eyebrow">{{ t().policies.eyebrow }}</p>
+    <h1 id="policies-title">
+      {{ t().policies.title }}<br /><span>{{ t().policies.titleAccent }}</span>
+    </h1>
   </div>
   <div class="policy-meta">
-    <span>Version 1.0</span>
-    <span>Last updated August 4, 2026</span>
-    <p>Plain-language guidance for using Serv.io with confidence.</p>
+    <span>{{ t().policies.version }}</span>
+    <span>{{ t().policies.updated }}</span>
+    <p>{{ t().policies.intro }}</p>
   </div>
 </section>
 
 <div class="policy-layout">
   <aside class="side-navigation">
-    <p>On this page</p>
-    <nav aria-label="Policy sections">
-      @for (section of sections; track section.id) {
+    <p>{{ t().policies.onPage }}</p>
+    <nav [attr.aria-label]="t().policies.navigationAria">
+      @for (section of t().policies.sections; track section.id) {
         <a
           [href]="'#' + section.id"
           [class.active]="activeSection() === section.id"
@@ -39,8 +41,8 @@
     </nav>
     <div class="help-card">
       <span aria-hidden="true">?</span>
-      <strong>Need clarity?</strong>
-      <p>Ask us about any part of these policies.</p>
+      <strong>{{ t().policies.needClarity }}</strong>
+      <p>{{ t().policies.helpText }}</p>
       <a href="mailto:privacy@serv.io">privacy&#64;serv.io</a>
     </div>
   </aside>
@@ -48,18 +50,18 @@
   <div class="policy-content">
     <p class="sr-only" aria-live="polite">
       @if (copiedSection()) {
-        Link copied to clipboard.
+        {{ t().policies.copiedAnnouncement }}
       }
     </p>
     <div class="plain-language-note">
       <span aria-hidden="true">✓</span>
       <div>
-        <strong>Our plain-language promise</strong>
-        <p>We write for people first. Expand any section to read the details.</p>
+        <strong>{{ t().policies.promiseTitle }}</strong>
+        <p>{{ t().policies.promiseText }}</p>
       </div>
     </div>
 
-    @for (section of sections; track section.id) {
+    @for (section of t().policies.sections; track section.id) {
       <section class="policy-section" [id]="section.id">
         <div class="policy-header">
           <button
@@ -80,11 +82,11 @@
             type="button"
             class="copy-link"
             [class.copied]="copiedSection() === section.id"
-            [attr.aria-label]="'Copy link to ' + section.title"
+            [attr.aria-label]="t().policies.copyAria + ' ' + section.title"
             (click)="copySectionLink(section.id)"
           >
             <span aria-hidden="true">{{ copiedSection() === section.id ? '✓' : '↗' }}</span>
-            {{ copiedSection() === section.id ? 'Copied' : 'Copy link' }}
+            {{ copiedSection() === section.id ? t().policies.copied : t().policies.copyLink }}
           </button>
         </div>
 
@@ -104,8 +106,8 @@
     }
 
     <div class="policy-end">
-      <span>End of policies</span>
-      <p>We review this page as Serv.io evolves. Material changes will be communicated clearly.</p>
+      <span>{{ t().policies.endTitle }}</span>
+      <p>{{ t().policies.endText }}</p>
     </div>
   </div>
 </div>
