@@ -1,0 +1,130 @@
+<div class="manager">
+  <div class="manager-scroll">
+    <header class="manager-head">
+      <h1>Sections</h1>
+      <p>Add, remove, reorder, and edit the sections shown on the homepage. Changes only go live after you click Save.</p>
+    </header>
+
+    <div class="lang-tabs">
+      <button type="button" [class.active]="lang() === 'en'" (click)="setLang('en')">English</button>
+      <button type="button" [class.active]="lang() === 'ar'" (click)="setLang('ar')">العربية</button>
+    </div>
+
+    <div class="section-list">
+      @for (section of draft; track section.id; let i = $index) {
+        <div class="section-card" [class.hidden-section]="!section.visible" [class.expanded]="expandedId() === section.id">
+          <div class="section-row">
+            <div class="order-controls">
+              <button type="button" (click)="moveUp(i)" [disabled]="i === 0" title="Move up">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+              </button>
+              <button type="button" (click)="moveDown(i)" [disabled]="i === draft.length - 1" title="Move down">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+              </button>
+            </div>
+
+            <button type="button" class="section-summary" (click)="toggleExpanded(section.id)">
+              <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 6l6 6-6 6"/>
+              </svg>
+              <span class="section-title" [class.placeholder]="isUntitled(section)">{{ displayTitle(section) }}</span>
+              <span class="kind-badge" [class]="'kind-' + section.kind">{{ kindLabel(section.kind) }}</span>
+            </button>
+
+            <button
+              type="button"
+              class="switch"
+              [class.on]="section.visible"
+              (click)="toggleVisible(section)"
+              [attr.aria-pressed]="section.visible"
+              title="Show / hide on homepage"
+            >
+              <span class="switch-knob"></span>
+            </button>
+
+            @if (canDelete(section)) {
+              <button type="button" class="btn-delete" (click)="removeSection(section.id)" title="Delete section">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+              </button>
+            }
+          </div>
+
+          @if (expandedId() === section.id) {
+            <div class="section-editor">
+              @if (section.kind === 'content') {
+                <div class="field-row">
+                  <div class="field">
+                    <label>Layout</label>
+                    <select [(ngModel)]="section.layout">
+                      <option value="text">Text</option>
+                      <option value="grid">Grid (cards)</option>
+                      <option value="steps">Steps (numbered)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label>Tag ({{ lang() }})</label>
+                  <input type="text" [(ngModel)]="section.tag[lang()]" placeholder="Small eyebrow label" />
+                </div>
+
+                <div class="field">
+                  <label>Title ({{ lang() }})</label>
+                  <input type="text" [(ngModel)]="section.title[lang()]" />
+                </div>
+
+                <div class="field">
+                  <label>Body ({{ lang() }})</label>
+                  <textarea rows="3" [(ngModel)]="section.body[lang()]"></textarea>
+                </div>
+
+                @if (section.layout === 'grid' || section.layout === 'steps') {
+                  <div class="items-block">
+                    <div class="items-head">
+                      <span>Items</span>
+                      <button type="button" class="btn-ghost small" (click)="addItem(section)">+ Add item</button>
+                    </div>
+
+                    @for (item of section.items; track item.id; let j = $index) {
+                      <div class="item-card">
+                        <div class="item-row">
+                          <input type="text" class="item-title" [(ngModel)]="item.title[lang()]" placeholder="Item title ({{ lang() }})" />
+                          <div class="order-controls">
+                            <button type="button" (click)="moveItemUp(section, j)" [disabled]="j === 0" title="Move up">
+                              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+                            </button>
+                            <button type="button" (click)="moveItemDown(section, j)" [disabled]="j === section.items.length - 1" title="Move down">
+                              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                            </button>
+                          </div>
+                          <button type="button" class="btn-delete" (click)="removeItem(section, item.id)" title="Remove item">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                          </button>
+                        </div>
+                        <textarea rows="2" [(ngModel)]="item.body[lang()]" placeholder="Item body ({{ lang() }})"></textarea>
+                      </div>
+                    }
+                  </div>
+                }
+              } @else {
+                <p class="fixed-note">
+                  {{ section.note[lang()] }}
+                </p>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <button type="button" class="btn-ghost" (click)="addSection()">+ Add section</button>
+  </div>
+
+  <div class="manager-actions">
+    <button type="button" class="btn-ghost" (click)="resetFromServer()">Discard changes</button>
+    <button type="button" class="btn-primary" (click)="save()">Save</button>
+    @if (status()) {
+      <span class="status">{{ status() }}</span>
+    }
+  </div>
+</div>

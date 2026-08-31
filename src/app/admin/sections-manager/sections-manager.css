@@ -1,0 +1,274 @@
+/* Stretches to fill admin-content (see admin-shell.css). min-height: 0 lets
+   .manager-scroll below actually shrink and become the scrolling element,
+   instead of the whole page scrolling. */
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+
+.manager {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+
+.manager-head h1 { font-size: 24px; margin-bottom: 6px; }
+.manager-head p { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
+
+/* Everything except the action bar lives in here and scrolls on its own,
+   so the action bar below it never moves. */
+.manager-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.lang-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+.lang-tabs button {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--surface-border);
+  background: var(--surface-alt);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.lang-tabs button.active {
+  background: var(--sandy);
+  color: #0D0D0D;
+  border-color: var(--sandy);
+}
+
+.section-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+
+.section-card {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.section-card.expanded {
+  border-color: color-mix(in srgb, var(--sandy) 40%, var(--surface-border));
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+.section-card.hidden-section { opacity: 0.5; }
+
+.section-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+}
+
+.order-controls { display: flex; flex-direction: column; gap: 2px; }
+.order-controls button {
+  width: 22px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: 1px solid var(--surface-border);
+  background: var(--surface-alt);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.order-controls button:hover:not(:disabled) { color: var(--text); border-color: var(--text-muted); }
+.order-controls button:disabled { opacity: 0.3; cursor: default; }
+
+.section-summary {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 4px;
+  text-align: start;
+  min-width: 0;
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  transition: transform 0.15s ease;
+}
+.section-card.expanded .chevron { transform: rotate(90deg); color: var(--sandy); }
+
+.section-title {
+  font-weight: 700;
+  font-size: 14.5px;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.section-title.placeholder {
+  font-weight: 500;
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+.kind-badge {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-inline-start: auto;
+}
+.kind-badge.kind-content {
+  color: var(--cyan);
+  background: color-mix(in srgb, var(--cyan) 14%, transparent);
+}
+.kind-badge.kind-hero,
+.kind-badge.kind-contact {
+  color: var(--text-muted);
+  background: var(--surface-alt);
+}
+
+.switch {
+  width: 40px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--surface-border);
+  border: none;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+.switch.on { background: var(--sandy); }
+.switch-knob {
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s ease;
+}
+.switch.on .switch-knob { transform: translateX(18px); }
+
+.btn-delete {
+  width: 28px; height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid var(--surface-border);
+  background: var(--surface-alt);
+  color: var(--coral);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.btn-delete:hover { background: color-mix(in srgb, var(--coral) 12%, var(--surface-alt)); }
+
+.section-editor {
+  padding: 6px 20px 20px 52px;
+  border-top: 1px solid var(--surface-border);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.field-row { display: flex; gap: 14px; }
+.field { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.field label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+.field input, .field select, .field textarea {
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--surface-alt);
+  border: 1px solid var(--surface-border);
+  border-radius: 10px;
+  padding: 9px 12px;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: none;
+  border-color: var(--cyan);
+}
+.field textarea { resize: vertical; }
+
+.fixed-note {
+  font-size: 13px;
+  color: var(--text-muted);
+  padding-top: 4px;
+}
+
+.items-block { display: flex; flex-direction: column; gap: 10px; }
+.items-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.item-card {
+  background: var(--surface-alt);
+  border: 1px solid var(--surface-border);
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.item-row { display: flex; align-items: center; gap: 8px; }
+.item-title { flex: 1; }
+.item-row input, .item-card textarea {
+  font-family: inherit;
+  font-size: 13.5px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 13.5px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--surface-border);
+  cursor: pointer;
+}
+.btn-ghost:hover { border-color: var(--text-muted); }
+.btn-ghost.small { padding: 5px 12px; font-size: 12.5px; }
+
+/* No longer sticky -- it's simply the last item in the .manager flex
+   column, so it always renders at the true bottom of the pane, full stop. */
+.manager-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  background: var(--bg);
+  padding: 16px 0 4px;
+  border-top: 1px solid var(--surface-border);
+  margin-top: 20px;
+}
+
+.btn-primary {
+  background: var(--sandy);
+  color: #0D0D0D;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+}
+
+.status { font-size: 13px; color: var(--text-muted); }

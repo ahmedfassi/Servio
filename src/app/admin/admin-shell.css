@@ -83,10 +83,31 @@
   font-weight: 600;
 }
 
+/* admin-content is now the sizing authority for whatever the router renders:
+   it's a flex column that fills the remaining viewport height and clips its
+   own overflow, so the routed page (content-editor / sections-manager) can
+   stretch to exactly that height and manage its OWN internal scroll + a
+   footer action bar that's guaranteed to sit at the true bottom, instead of
+   relying on position: sticky (which sticks to wherever the content happens
+   to end, not the actual bottom of the screen). */
 .admin-content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   padding: 36px 40px;
-  overflow-y: auto;
+}
+
+/* Stretches the routed component's host element (the sibling Angular
+   inserts right after <router-outlet>) to fill admin-content's height.
+   min-height: 0 is required so a flex child is allowed to shrink below its
+   content's natural height -- without it, the inner scroll area can't
+   activate and the whole page scrolls instead. */
+.admin-content router-outlet + * {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (max-width: 720px) {

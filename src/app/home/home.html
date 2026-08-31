@@ -3,17 +3,10 @@
     <a href=""><div class="logo">Serv<span>.io</span></div></a>
 
     <div class="nav-links">
-      @if (content.sectionVisible('about')) {
-      <a href="#about" (click)="scrollToSection('about', $event)">{{ 'nav.about' | translate }}</a>
-      }
-      @if (content.sectionVisible('features')) {
-      <a href="#features" (click)="scrollToSection('features', $event)">{{ 'nav.features' | translate }}</a>
-      }
-      @if (content.sectionVisible('flow')) {
-      <a href="#flow" (click)="scrollToSection('flow', $event)">{{ 'nav.flow' | translate }}</a>
-      }
-      @if (content.sectionVisible('contact')) {
-      <a href="#contact" (click)="scrollToSection('contact', $event)">{{ 'nav.contact' | translate }}</a>
+      @for (s of sections.visibleSections(); track s.id) {
+        @if ((s.kind === 'content' || s.kind === 'contact') && s.tag[i18n.value()]) {
+          <a [href]="'#' + s.id" (click)="scrollToSection(s.id, $event)">{{ s.tag[i18n.value()] }}</a>
+        }
       }
     </div>
 
@@ -64,275 +57,223 @@
 
   @if (mobileMenuOpen()) {
     <div class="mobile-menu">
-      <a href="#about" (click)="navigateToSection('about', $event)">{{ 'nav.about' | translate }}</a>
-      <a href="#features" (click)="navigateToSection('features', $event)">{{ 'nav.features' | translate }}</a>
-      <a href="#flow" (click)="navigateToSection('flow', $event)">{{ 'nav.flow' | translate }}</a>
-      <a href="#contact" (click)="navigateToSection('contact', $event)">{{ 'nav.contact' | translate }}</a>
+      @for (s of sections.visibleSections(); track s.id) {
+        @if (s.kind === 'content' && s.tag[i18n.value()]) {
+          <a [href]="'#' + s.id" (click)="navigateToSection(s.id, $event)">{{ s.tag[i18n.value()] }}</a>
+        }
+        @if (s.kind === 'contact' && s.tag[i18n.value()]) {
+          <a [href]="'#' + s.id" (click)="navigateToSection(s.id, $event)">{{ s.tag[i18n.value()] }}</a>
+        }
+      }
+      
     </div>
   }
 </header>
 
-<section class="hero">
-  <div class="wrap hero-grid">
-    <div appScrollReveal [revealVariant]="'left'">
-      <div class="eyebrow">{{ 'hero.eyebrow' | translate }}</div>
-      <h1>
-        {{ 'hero.title1' | translate }}<br>
-        <em>{{ 'hero.title2' | translate }}</em>
-      </h1>
-      <p class="lead">{{ 'hero.lead' | translate }}</p>
-      <div class="hero-actions">
-        <a href="#contact" class="btn-primary" (click)="scrollToSection('contact', $event)">{{ 'hero.ctaPrimary' | translate }}</a>
-        <a href="#features" class="btn-ghost" (click)="scrollToSection('features', $event)">{{ 'hero.ctaSecondary' | translate }}</a>
-      </div>
-      <div class="hero-stats">
-        <div><strong>{{ 'hero.stat1Num' | translate }}</strong><span>{{ 'hero.stat1Label' | translate }}</span></div>
-        <div><strong>{{ 'hero.stat2Num' | translate }}</strong><span>{{ 'hero.stat2Label' | translate }}</span></div>
-        <div><strong>{{ 'hero.stat3Num' | translate }}</strong><span>{{ 'hero.stat3Label' | translate }}</span></div>
-      </div>
-    </div>
+<!-- Dynamic, admin-managed sections in order. Hero and Contact keep their
+     original interactive markup (widget / form); 'content' sections render
+     generically based on their chosen layout. -->
+@for (s of sections.visibleSections(); track s.id) {
 
-    <div class="floor-card" appScrollReveal [revealDelay]="150" [revealVariant]="'right'">
-      <div class="floor-head">
-        <h3>{{ 'floor.title' | translate }}</h3>
-        <div class="live-tag"><span class="live-dot"></span>{{ 'floor.live' | translate }}</div>
-      </div>
+  @switch (s.kind) {
 
-      <div class="floor-grid">
-        @for (t of tables(); track t.id) {
-          <div class="table-cell" [class]="t.status">T{{ t.id }}</div>
-        }
-      </div>
-
-      <div class="floor-legend">
-        <span><i class="legend-dot" style="background:var(--cyan)"></i>{{ 'floor.legendAvailable' | translate }}</span>
-        <span><i class="legend-dot" style="background:var(--coral)"></i>{{ 'floor.legendOccupied' | translate }}</span>
-        <span><i class="legend-dot" style="background:var(--lavender)"></i>{{ 'floor.legendReserved' | translate }}</span>
-        <span><i class="legend-dot" style="background:var(--sandy)"></i>{{ 'floor.legendCheckout' | translate }}</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-@if (content.sectionVisible('about')) {
-<section class="about" id="about">
-  <div class="wrap about-grid">
-    <div appScrollReveal [revealVariant]="'left'">
-      <div class="section-tag">{{ 'about.tag' | translate }}</div>
-      <h2>{{ 'about.title' | translate }}</h2>
-      <p class="section-lead">{{ 'about.lead' | translate }}</p>
-      <div class="pill-list">
-        <span class="pill">{{ 'pill.menu' | translate }}</span>
-        <span class="pill">{{ 'pill.qr' | translate }}</span>
-        <span class="pill">{{ 'pill.table' | translate }}</span>
-        <span class="pill">{{ 'pill.tracking' | translate }}</span>
-        <span class="pill">{{ 'pill.checkout' | translate }}</span>
-        <span class="pill">{{ 'pill.roles' | translate }}</span>
-        <span class="pill">{{ 'pill.payment' | translate }}</span>
-        <span class="pill">{{ 'pill.analytics' | translate }}</span>
-      </div>
-    </div>
-
-    <div class="about-panel" appScrollReveal [revealDelay]="150" [revealVariant]="'zoom'">
-      <div class="step">
-        <div class="step-mark">1</div>
-        <div><h4>{{ 'about.step1Title' | translate }}</h4><p>{{ 'about.step1Desc' | translate }}</p></div>
-      </div>
-      <div class="step">
-        <div class="step-mark">2</div>
-        <div><h4>{{ 'about.step2Title' | translate }}</h4><p>{{ 'about.step2Desc' | translate }}</p></div>
-      </div>
-      <div class="step">
-        <div class="step-mark">3</div>
-        <div><h4>{{ 'about.step3Title' | translate }}</h4><p>{{ 'about.step3Desc' | translate }}</p></div>
-      </div>
-    </div>
-  </div>
-</section>
-}
-
-@if (content.sectionVisible('features')) {
-<section class="features" id="features">
-  <div class="wrap">
-    <div class="section-tag" appScrollReveal>{{ 'features.tag' | translate }}</div>
-    <h2 appScrollReveal [revealDelay]="80">{{ 'features.title' | translate }}</h2>
-    <p class="section-lead" appScrollReveal [revealDelay]="140">{{ 'features.lead' | translate }}</p>
-
-    <div class="feature-grid">
-      @for (f of features; track f.key; let i = $index) {
-        <div class="feature-card" appScrollReveal [revealDelay]="i * 80" [revealVariant]="'zoom'">
-          <div class="feature-icon" [style.background]="f.color">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0D0D0D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path [attr.d]="f.icon"/>
-            </svg>
+    @case ('hero') {
+      <section class="hero">
+        <div class="wrap hero-grid">
+          <div appScrollReveal [revealVariant]="'left'">
+            <div class="eyebrow">{{ 'hero.eyebrow' | translate }}</div>
+            <h1>
+              {{ 'hero.title1' | translate }}<br>
+              <em>{{ 'hero.title2' | translate }}</em>
+            </h1>
+            <p class="lead">{{ 'hero.lead' | translate }}</p>
+            <div class="hero-actions">
+              <a href="#contact" class="btn-primary" (click)="scrollToSection('contact', $event)">{{ 'hero.ctaPrimary' | translate }}</a>
+              <a href="#features" class="btn-ghost" (click)="scrollToSection('features', $event)">{{ 'hero.ctaSecondary' | translate }}</a>
+            </div>
+            <div class="hero-stats">
+              <div><strong>{{ 'hero.stat1Num' | translate }}</strong><span>{{ 'hero.stat1Label' | translate }}</span></div>
+              <div><strong>{{ 'hero.stat2Num' | translate }}</strong><span>{{ 'hero.stat2Label' | translate }}</span></div>
+              <div><strong>{{ 'hero.stat3Num' | translate }}</strong><span>{{ 'hero.stat3Label' | translate }}</span></div>
+            </div>
           </div>
-          <h3>{{ 'feature.' + f.key + '.title' | translate }}</h3>
-          <p>{{ 'feature.' + f.key + '.desc' | translate }}</p>
+
+          <div class="floor-card" appScrollReveal [revealDelay]="150" [revealVariant]="'right'">
+            <div class="floor-head">
+              <h3>{{ 'floor.title' | translate }}</h3>
+              <div class="live-tag"><span class="live-dot"></span>{{ 'floor.live' | translate }}</div>
+            </div>
+
+            <div class="floor-grid">
+              @for (t of tables(); track t.id) {
+                <div class="table-cell" [class]="t.status">T{{ t.id }}</div>
+              }
+            </div>
+
+            <div class="floor-legend">
+              <span><i class="legend-dot" style="background:var(--cyan)"></i>{{ 'floor.legendAvailable' | translate }}</span>
+              <span><i class="legend-dot" style="background:var(--coral)"></i>{{ 'floor.legendOccupied' | translate }}</span>
+              <span><i class="legend-dot" style="background:var(--lavender)"></i>{{ 'floor.legendReserved' | translate }}</span>
+              <span><i class="legend-dot" style="background:var(--sandy)"></i>{{ 'floor.legendCheckout' | translate }}</span>
+            </div>
+          </div>
         </div>
-      }
-    </div>
-  </div>
-</section>
-}
+      </section>
+    }
 
-@if (content.sectionVisible('flow')) {
-<section class="flow" id="flow">
-  <div class="wrap">
-    <div class="section-tag" appScrollReveal>{{ 'flow.tag' | translate }}</div>
-    <h2 appScrollReveal [revealDelay]="80">{{ 'flow.title' | translate }}</h2>
-    <p class="section-lead" appScrollReveal [revealDelay]="140">{{ 'flow.lead' | translate }}</p>
-
-    <div class="ticket">
-      <div class="ticket-inner">
-        @for (s of flowSteps; track s.key; let i = $index) {
-          <div class="ticket-step" appScrollReveal [revealDelay]="i * 100" [revealVariant]="'up'">
-            <div class="num">{{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }}</div>
-            <h4>{{ 'flow.' + s.key + 'Title' | translate }}</h4>
-            <p>{{ 'flow.' + s.key + 'Desc' | translate }}</p>
+    @case ('contact') {
+      <section class="contact" [id]="s.id">
+        <div class="wrap">
+          <div class="contact-head" appScrollReveal>
+            <div class="section-tag">{{ 'contact.tag' | translate }}</div>
+            <h2>{{ 'contact.title' | translate }}</h2>
+            <p class="section-lead">{{ 'contact.lead' | translate }}</p>
           </div>
-        }
-      </div>
-    </div>
-  </div>
-</section>
-}
 
-@if (content.sectionVisible('contact')) {
-<section class="contact" id="contact">
-  <div class="wrap">
-    <div class="contact-head" appScrollReveal>
-      <div class="section-tag">{{ 'contact.tag' | translate }}</div>
-      <h2>{{ 'contact.title' | translate }}</h2>
-      <p class="section-lead">{{ 'contact.lead' | translate }}</p>
-    </div>
+          <div class="contact-card" appScrollReveal [revealDelay]="150" [revealVariant]="'zoom'">
+            <div class="contact-card-bar"></div>
 
-    <div class="contact-card" appScrollReveal [revealDelay]="150" [revealVariant]="'zoom'">
-      <div class="contact-card-bar"></div>
+            <div class="contact-quickinfo">
+              <a href="mailto:{{ 'contact.email' | translate }}" class="quickinfo-item">
+                <span class="quickinfo-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 5h16v14H4z"/><path d="M4 6l8 7 8-7"/>
+                  </svg>
+                </span>
+                {{ 'contact.email' | translate }}
+              </a>
+              <a href="tel:{{ 'contact.phone' | translate }}" class="quickinfo-item">
+                <span class="quickinfo-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 5c0 8.5 6.5 15 15 15l3-3-5-4-2 2c-2-1-4-3-5-5l2-2-4-5-3 2z"/>
+                  </svg>
+                </span>
+                {{ 'contact.phone' | translate }}
+              </a>
+              <span class="quickinfo-item static">
+                <span class="quickinfo-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 21s7-6.5 7-11.5A7 7 0 0 0 5 9.5C5 14.5 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/>
+                  </svg>
+                </span>
+                {{ 'contact.address' | translate }}
+              </span>
+            </div>
 
-      <div class="contact-quickinfo">
-        <a href="mailto:{{ 'contact.email' | translate }}" class="quickinfo-item">
-          <span class="quickinfo-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 5h16v14H4z"/><path d="M4 6l8 7 8-7"/>
-            </svg>
-          </span>
-          {{ 'contact.email' | translate }}
-        </a>
-        <a href="tel:{{ 'contact.phone' | translate }}" class="quickinfo-item">
-          <span class="quickinfo-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 5c0 8.5 6.5 15 15 15l3-3-5-4-2 2c-2-1-4-3-5-5l2-2-4-5-3 2z"/>
-            </svg>
-          </span>
-          {{ 'contact.phone' | translate }}
-        </a>
-        <span class="quickinfo-item static">
-          <span class="quickinfo-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 21s7-6.5 7-11.5A7 7 0 0 0 5 9.5C5 14.5 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/>
-            </svg>
-          </span>
-          {{ 'contact.address' | translate }}
-        </span>
-      </div>
+            <form class="contact-form" action="mailto:hello@servio.app" method="post" enctype="text/plain">
+              <div class="form-row">
+                <div class="field">
+                  <input type="text" name="firstName" id="cf-first" placeholder=" " required />
+                  <label for="cf-first">{{ 'contact.firstName' | translate }}</label>
+                </div>
+                <div class="field">
+                  <input type="text" name="lastName" id="cf-last" placeholder=" " required />
+                  <label for="cf-last">{{ 'contact.lastName' | translate }}</label>
+                </div>
+              </div>
 
-      @if (contactStatus() === 'success') {
-        <div class="contact-form-status success">
-          {{ i18n.value() === 'ar' ? 'شكراً لك! تم إرسال رسالتك بنجاح.' : 'Thanks! Your message has been sent.' }}
+              <div class="form-row">
+                <div class="field">
+                  <input type="email" name="email" id="cf-email" placeholder=" " required />
+                  <label for="cf-email">{{ 'contact.formEmail' | translate }}</label>
+                </div>
+                <div class="field">
+                  <input type="tel" name="phone" id="cf-phone" placeholder=" " />
+                  <label for="cf-phone">{{ 'contact.phoneLabel' | translate }}</label>
+                </div>
+              </div>
+
+              <div class="subject-block">
+                <span class="subject-title">{{ 'contact.subjectLabel' | translate }}</span>
+                <div class="subject-pills">
+                  <label class="pill-option">
+                    <input type="radio" name="subject" value="partnership" checked />
+                    <span>{{ 'contact.subjectPartnership' | translate }}</span>
+                  </label>
+                  <label class="pill-option">
+                    <input type="radio" name="subject" value="business" />
+                    <span>{{ 'contact.subjectBusiness' | translate }}</span>
+                  </label>
+                  <label class="pill-option">
+                    <input type="radio" name="subject" value="userInquiry" />
+                    <span>{{ 'contact.subjectUserInquiry' | translate }}</span>
+                  </label>
+                  <label class="pill-option">
+                    <input type="radio" name="subject" value="appInquiry" />
+                    <span>{{ 'contact.subjectAppInquiry' | translate }}</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="field">
+                <textarea name="message" id="cf-message" rows="3" placeholder=" " required></textarea>
+                <label for="cf-message">{{ 'contact.formMessage' | translate }}</label>
+              </div>
+
+              <div class="form-submit-row">
+                <button type="submit" class="btn-send">
+                  {{ 'contact.formSend' | translate }}
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14M13 6l6 6-6 6"/>
+                  </svg>
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-      } @else {
+      </section>
+    }
 
-        @if (contactStatus() === 'error') {
-          <div class="contact-form-status error">
-            {{ i18n.value() === 'ar' ? 'حدث خطأ أثناء الإرسال، حاول مجدداً.' : 'Something went wrong sending your message. Please try again.' }}
-          </div>
-        }
+    @case ('content') {
+      <section class="dyn-section" [id]="s.id">
+        <div class="wrap">
+          @if (s.tag[i18n.value()]) {
+            <div class="section-tag" appScrollReveal>{{ s.tag[i18n.value()] }}</div>
+          }
+          @if (s.title[i18n.value()]) {
+            <h2 appScrollReveal [revealDelay]="80">{{ s.title[i18n.value()] }}</h2>
+          }
+          @if (s.body[i18n.value()]) {
+            <p class="section-lead" appScrollReveal [revealDelay]="140">{{ s.body[i18n.value()] }}</p>
+          }
 
-        <form class="contact-form" #contactFormRef="ngForm" (ngSubmit)="contactFormRef.valid && submitContact()">
-          <div class="form-row">
-            <div class="field">
-              <input
-                type="text" name="firstName" id="cf-first" placeholder=" " required
-                [(ngModel)]="contactForm.firstName"
-                [disabled]="contactStatus() === 'sending'"
-              />
-              <label for="cf-first">{{ 'contact.firstName' | translate }}</label>
-            </div>
-            <div class="field">
-              <input
-                type="text" name="lastName" id="cf-last" placeholder=" " required
-                [(ngModel)]="contactForm.lastName"
-                [disabled]="contactStatus() === 'sending'"
-              />
-              <label for="cf-last">{{ 'contact.lastName' | translate }}</label>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="field">
-              <input
-                type="email" name="email" id="cf-email" placeholder=" " required
-                [(ngModel)]="contactForm.email"
-                [disabled]="contactStatus() === 'sending'"
-              />
-              <label for="cf-email">{{ 'contact.formEmail' | translate }}</label>
-            </div>
-            <div class="field">
-              <input
-                type="tel" name="phone" id="cf-phone" placeholder=" "
-                [(ngModel)]="contactForm.phone"
-                [disabled]="contactStatus() === 'sending'"
-              />
-              <label for="cf-phone">{{ 'contact.phoneLabel' | translate }}</label>
-            </div>
-          </div>
-
-          <div class="subject-block">
-            <span class="subject-title">{{ 'contact.subjectLabel' | translate }}</span>
-            <div class="subject-pills">
-              <label class="pill-option">
-                <input type="radio" name="subject" value="partnership" [(ngModel)]="contactForm.subject" [disabled]="contactStatus() === 'sending'" />
-                <span>{{ 'contact.subjectPartnership' | translate }}</span>
-              </label>
-              <label class="pill-option">
-                <input type="radio" name="subject" value="business" [(ngModel)]="contactForm.subject" [disabled]="contactStatus() === 'sending'" />
-                <span>{{ 'contact.subjectBusiness' | translate }}</span>
-              </label>
-              <label class="pill-option">
-                <input type="radio" name="subject" value="userInquiry" [(ngModel)]="contactForm.subject" [disabled]="contactStatus() === 'sending'" />
-                <span>{{ 'contact.subjectUserInquiry' | translate }}</span>
-              </label>
-              <label class="pill-option">
-                <input type="radio" name="subject" value="appInquiry" [(ngModel)]="contactForm.subject" [disabled]="contactStatus() === 'sending'" />
-                <span>{{ 'contact.subjectAppInquiry' | translate }}</span>
-              </label>
-            </div>
-          </div>
-
-          <div class="field">
-            <textarea
-              name="message" id="cf-message" rows="3" placeholder=" " required
-              [(ngModel)]="contactForm.message"
-              [disabled]="contactStatus() === 'sending'"
-            ></textarea>
-            <label for="cf-message">{{ 'contact.formMessage' | translate }}</label>
-          </div>
-
-          <div class="form-submit-row">
-            <button type="submit" class="btn-send" [disabled]="contactStatus() === 'sending'">
-              {{ contactStatus() === 'sending'
-                  ? (i18n.value() === 'ar' ? 'جارٍ الإرسال...' : 'Sending...')
-                  : ('contact.formSend' | translate) }}
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 12h14M13 6l6 6-6 6"/>
-              </svg>
-            </button>
-          </div>
-        </form>
-      }
-    </div>
-  </div>
-</section>
+          @switch (s.layout) {
+            @case ('grid') {
+              <div class="dyn-grid">
+                @for (item of s.items; track item.id; let i = $index) {
+                  <div class="dyn-card" appScrollReveal [revealDelay]="i * 80" [revealVariant]="'zoom'">
+                    <div class="dyn-card-icon">{{ item.icon }}</div>
+                    <h3>{{ item.title[i18n.value()] }}</h3>
+                    <p>{{ item.body[i18n.value()] }}</p>
+                  </div>
+                }
+              </div>
+            }
+            @case ('steps') {
+              <div class="dyn-steps">
+                @for (item of s.items; track item.id; let i = $index) {
+                  <div class="dyn-step" appScrollReveal [revealDelay]="i * 100" [revealVariant]="'up'">
+                    <div class="num">{{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }}</div>
+                    <h4>{{ item.title[i18n.value()] }}</h4>
+                    <p>{{ item.body[i18n.value()] }}</p>
+                  </div>
+                }
+              </div>
+            }
+            @default {
+              @if (s.items.length) {
+                <div class="dyn-pill-list">
+                  @for (item of s.items; track item.id) {
+                    <span class="pill">{{ item.icon }} {{ item.title[i18n.value()] }}</span>
+                  }
+                </div>
+              }
+            }
+          }
+        </div>
+      </section>
+    }
+  }
 }
 
 <footer>
@@ -343,13 +284,19 @@
       <div class="footer-cols">
         <div class="footer-col">
           <h5>{{ 'footer.product' | translate }}</h5>
-          <a href="#about" (click)="scrollToSection('about', $event)">{{ 'nav.about' | translate }}</a>
-          <a href="#features" (click)="scrollToSection('features', $event)">{{ 'nav.features' | translate }}</a>
-          <a href="#flow" (click)="scrollToSection('flow', $event)">{{ 'nav.flow' | translate }}</a>
+          @for (s of sections.visibleSections(); track s.id) {
+            @if (s.kind === 'content' && s.tag[i18n.value()]) {
+              <a [href]="'#' + s.id" (click)="scrollToSection(s.id, $event)">{{ s.tag[i18n.value()] }}</a>
+            }
+          }
         </div>
         <div class="footer-col">
           <h5>{{ 'footer.company' | translate }}</h5>
-          <a href="#contact" (click)="scrollToSection('contact', $event)">{{ 'footer.contact' | translate }}</a>
+          @for (s of sections.visibleSections(); track s.id) {
+            @if (s.kind === 'contact' && s.tag[i18n.value()]) {
+              <a [href]="'#' + s.id" (click)="scrollToSection(s.id, $event)">{{ s.tag[i18n.value()] }}</a>
+            }
+          }
         </div>
       </div>
     </div>

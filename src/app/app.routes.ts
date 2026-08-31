@@ -3,7 +3,7 @@ import { Privacy } from './privacy/privacy';
 import { Home } from './home/home';
 import { AdminShell } from './admin/admin-shell';
 import { ContentEditor } from './admin/content-editor/content-editor';
-import { SectionToggles } from './admin/section-toggles/section-toggles';
+import { SectionsManager } from './admin/sections-manager/sections-manager';
 import { AdminLogin } from './admin/admin-login/admin-login';
 import { authGuard } from './guards/auth.guard';
 
@@ -18,7 +18,7 @@ export const routes: Routes = [
       children: [
         { path: '', redirectTo: 'content', pathMatch: 'full' },
         { path: 'content', component: ContentEditor },
-        { path: 'sections', component: SectionToggles },
+        { path: 'sections', component: SectionsManager },
       ],
     },
 ];
